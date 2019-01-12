@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>BuildCommon</artifactId>
+        <groupId>com.viasat.wildblue</groupId>
+        <version>3.8.0-005-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.viasat.internalservice.querycollector</groupId>
+    <artifactId>InternalService-QueryCollector</artifactId>
+    <version>1.0.0-009-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>InternalService-QueryCollector</name>
+    <url>http://maven.apache.org</url>
+    <description>Internal Service Service Location</description>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <cxf.version>3.1.7</cxf.version>
+        <swagger.version>1.5.10</swagger.version>
+        <jackson.version>2.8.2</jackson.version>
+        <avro.version>1.7.7</avro.version>
+    </properties>
+    <modules>
+        <module>api</module>
+        <module>war</module>
+    </modules>
+
+    <scm>
+        <connection>scm:git:ssh://git@git.viasat.com/DenverIT/internalservice-querycollector.git</connection>
+        <developerConnection>scm:git:ssh://git@git.viasat.com/DenverIT/internalservice-querycollector.git
+        </developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    <distributionManagement>
+        <site>
+            <id>itbuild01.prod</id>
+            <url>dav:http://10.65.20.5:8060/sites/InternalService-QueryCollector/</url>
+        </site>
+    </distributionManagement>
+    <issueManagement>
+        <system>Jira</system>
+        <url>[http://itrack.prod.wdc1.wildblue.net/jira/browse/ISNM]</url>
+    </issueManagement>
+    <dependencyManagement>
+        <dependencies>
+            <!-- project modules -->
+            <dependency>
+                <groupId>com.viasat.internalservice.metriccollector</groupId>
+                <artifactId>InternalService-MetricsCollector-API</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- internal libraries -->
+            <dependency>
+                <groupId>com.viasat.wildblue.common</groupId>
+                <artifactId>Common</artifactId>
+                <version>${wildblue.common.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.cxf.xjc-utils</groupId>
+                        <artifactId>cxf-xjc-runtime</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.viasat.wildblue</groupId>
+                <artifactId>LoadSecureProperties-Common</artifactId>
+                <version>1.0.0-007</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viasat.wildblue.common</groupId>
+                <artifactId>Common</artifactId>
+                <version>${wildblue.common.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+                <exclusions>
+            <!--        <exclusion>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                    </exclusion>  -->
+                    <exclusion>
+                        <groupId>org.apache.cxf.xjc-utils</groupId>
+                        <artifactId>cxf-xjc-runtime</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.viasat.internalservice.fault</groupId>
+                <artifactId>Library-InternalFault</artifactId>
+                <version>1.0.0-008</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viasat.common.rest</groupId>
+                <artifactId>Library-RSProviders</artifactId>
+                <version>1.0.0-005</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viasat.common.applicationstatus</groupId>
+                <artifactId>ApplicationStatusServlet</artifactId>
+                <version>2.3.0-003-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.viasat.wildblue.internalwebservice.configuration</groupId>
+                <artifactId>InternalWebService-Configuration-API</artifactId>
+                <version>1.6.0-003-SNAPSHOT</version>
+            </dependency>
+
+            <!-- external libraries -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-management</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-extension-search</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-client</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-extension-providers</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+			            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <!-- swagger ui for cxf -->
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-service-description-swagger</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>swagger-ui</artifactId>
+                <version>2.2.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro</artifactId>
+                <version>${avro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-service-archetype</artifactId>
+                <version>1.8.1</version>
+            </dependency>
+            <dependency>
+                <groupId>io.viasat.databus</groupId>
+                <artifactId>jidb</artifactId>
+                <version>2.0.6</version>
+                <!--     <classifier>jar-with-dependencies</classifier> -->
+            </dependency>
+            <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>1.1.2.6</version>
+            </dependency>
+            <!-- Quartz framework -->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>2.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>1.11.116</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc14</artifactId>
+                <version>10.2.0.2.0</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>TestInt</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemProperties>
+                            </systemProperties>
+                            <argLine>-Xms512m -Xmx1536m -XX:MaxPermSize=128m</argLine>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- Never skip running the tests when the integration-test phase
+                                            is invoked -->
+                                    <skip>false</skip>
+                                    <includes>
+                                        <!-- Include integration tests within integration-test phase. -->
+                                        <include>**/*Int.*</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

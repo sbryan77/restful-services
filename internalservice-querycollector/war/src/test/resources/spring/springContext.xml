@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://cxf.apache.org/jaxrs
+                        http://cxf.apache.org/schemas/jaxrs.xsd
+                        http://cxf.apache.org/core
+                        http://cxf.apache.org/schemas/core.xsd
+                        http://www.springframework.org/schema/tx
+                        http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd">
+                        
+    <context:component-scan base-package="com.viasat.internalservice.querycollector"/>
+    <context:annotation-config/>
+
+
+    <!-- This spring bean forces Spring's JPA support framework to process JPA
+        annotations like @PersistenceContext to do things like injecting an entity
+        manager into an object that must use JPA to interact with a database. -->
+    <bean id="PersistenceAnnotationBeanPostProcessor"
+          class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor">
+    </bean>
+
+    
+    <jaxrs:server id="queryCollectionService" address="/">
+        <jaxrs:serviceBeans>
+            <ref bean="queryCollectorImpl"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="com.viasat.common.rs.providers.CustomContainerFilter"/>
+            <bean class="com.viasat.common.rs.providers.CustomParamConverterProvider" />
+            <bean class="com.viasat.internalservice.fault.providers.ViaSatExceptionMapper" />
+        </jaxrs:providers>
+        <jaxrs:features>
+            <bean class="org.apache.cxf.jaxrs.swagger.Swagger2Feature"/>
+        </jaxrs:features>
+        <jaxrs:outInterceptors>
+            <ref bean="lastResponseTime" />
+        </jaxrs:outInterceptors>
+        <jaxrs:outFaultInterceptors>
+            <ref bean="lastResponseTime" />
+        </jaxrs:outFaultInterceptors>
+    </jaxrs:server>
+
+    <cxf:bus>
+        <cxf:inInterceptors>
+            <ref bean="logInbound"/>
+        </cxf:inInterceptors>
+        <cxf:outInterceptors>
+            <ref bean="logOutbound"/>
+        </cxf:outInterceptors>
+        <cxf:outFaultInterceptors>
+            <ref bean="logOutbound"/>
+        </cxf:outFaultInterceptors>
+    </cxf:bus>
+
+    <bean id="logInbound" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+    <bean id="logOutbound" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
+    
+    <!-- REST service implementations -->
+    <bean id="queryCollectorImpl" class="com.viasat.internalservice.querycollector.rest.QueryCollectorImpl">
+        <property name="queryProcessor" ref="queryProcessor" />
+        <property name="selfMonitorProcessor" ref="selfMonitorProcessor" />
+    </bean>
+    <bean id="queryCollectorPersistence" class="com.viasat.internalservice.querycollector.persistence.QueryCollectorPersistence">
+    </bean>
+    <bean id="queryProcessor" class="com.viasat.internalservice.querycollector.processor.QueryProcessor" >
+        <property name="selfMonitorProcessor" ref="selfMonitorProcessor" />
+        <property name="querySql" ref="querySql" />
+        <property name="queryDynamo" ref="queryDynamo" />
+    </bean>
+    <bean id="selfMonitorProcessor" class="com.viasat.internalservice.querycollector.processor.SelfMonitorProcessor" />
+    <bean id="querySql" class="com.viasat.internalservice.querycollector.persistence.QuerySql" />
+    <bean id="queryDynamo" class="com.viasat.internalservice.querycollector.persistence.QueryDynamo" />
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven/>
+
+</beans>

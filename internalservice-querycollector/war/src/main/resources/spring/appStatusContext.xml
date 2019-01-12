@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- Application Health Checks -->
+    <bean id="applicationHealthCheck"
+          class="com.viasat.common.applicationstatus.DefaultApplicationHealthCheckProcessor">
+        <!-- register custom health checks here -->
+        <property name="checks">
+            <list>
+            </list>
+        </property>
+    </bean>
+
+
+    <!-- Version Info Processor -->
+    <bean id="applicationInfo"
+          class="com.viasat.common.applicationstatus.DefaultApplicationInfoProcessor">
+        <property name="versionProperties">
+            <bean id="versionProperties" class="com.viasat.common.applicationstatus.VersionProperties">
+                <!-- Optionally override default name for the version.properties file -->
+                <!-- <constructor-arg name="propertiesResourceName" value="version" /> -->
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Environment Detail Processor -->
+    <bean id="environmentDetail"
+          class="com.viasat.common.applicationstatus.DefaultEnvironmentDetailProcessor"/>
+
+    <!-- Last Response Interceptor -->
+    <bean id="lastResponseTime"
+          class="com.viasat.common.applicationstatus.interceptor.LastResponseTime"/>
+
+    <!-- Servlet Setup -->
+    <bean id="ApplicationStatusServlet"
+          class="com.viasat.common.applicationstatus.servlet.ApplicationStatusServlet">
+        <property name="appInfoProcessor" ref="applicationInfo"/>
+        <property name="appHealthCheckProcessor" ref="applicationHealthCheck" />
+        <property name="envDetailProcessor" ref="environmentDetail"/>
+    </bean>
+
+    <!-- Logger Control Servlet setup -->
+    <bean id="LoggerServlet" class="com.viasat.common.applicationstatus.servlet.LoggerControlServlet"/>
+</beans>

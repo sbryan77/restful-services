@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.viasat.internalservice.querycollector</groupId>
+        <artifactId>InternalService-QueryCollector</artifactId>
+        <version>1.0.0-009-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.viasat.internalservice.querycollector</groupId>
+    <artifactId>InternalService-QueryCollector-WAR</artifactId>
+    <description>QueryCollector-WAR</description>
+    <packaging>war</packaging>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <context.root />
+        <context.version />
+    </properties>
+    <repositories>
+        <repository>
+            <id>artifactory.viasat.com-databus-maven</id>
+            <name>ViaSat Databus Repository</name>
+            <url>https://artifactory.viasat.com/artifactory/databus-maven</url>
+        </repository>
+        <repository>
+            <id>artifactory.viasat.com-confluent</id>
+            <name>Confluent Repo</name>
+            <url>https://artifactory.viasat.com/artifactory/confluent</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <!-- project modules -->
+        <dependency>
+            <groupId>com.viasat.internalservice.querycollector</groupId>
+            <artifactId>InternalService-QueryCollector-API</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- internal libraries -->
+        <dependency>
+            <groupId>com.viasat.internalservice.fault</groupId>
+            <artifactId>Library-InternalFault</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.viasat.common.applicationstatus</groupId>
+            <artifactId>ApplicationStatusServlet</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.viasat.wildblue</groupId>
+            <artifactId>LoadSecureProperties-Common</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- external linbraries -->
+        <dependency>
+            <groupId>org.xerial.snappy</groupId>
+            <artifactId>snappy-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <!-- Quartz framework -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>directory-naming</groupId>
+            <artifactId>naming-java</artifactId>
+            <version>0.8</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-management</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-extension-search</artifactId>
+        </dependency>
+        <!-- swagger ui -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-service-description-swagger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>swagger-ui</artifactId>
+        </dependency>
+        <!-- formatting java8 dates to ISO 8601 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <!-- IDB Dependencies -->
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro-service-archetype</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>io.viasat.databus</groupId>
+            <artifactId>jidb</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.11.116</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.noraui</groupId>
+            <artifactId>ojdbc7</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.4.2</version>
+                <executions>
+                    <execution>
+                        <id>default-copy-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>
+                                ${project.build.directory}/${project.artifactId}-${project.version}/.ebextensions
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src/main/.ebextensions</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- default maven war plugin (see BuildCommon pluginManagement) plus packagingExcludes for Tomcat -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <!--
+                      Exclude JCL and LOG4J since all logging should go through SLF4J.
+                      Note that we're excluding log4j-<version>.jar but keeping
+                      log4j-over-slf4j-<version>.jar
+                    -->
+                    <packagingExcludes>
+                        <!-- this jar is being excluded because the on that was being pulled in
+                             had older idb classes in it that were getting loaded instead of the jidb
+                             that was specified in  the dependency section, causing a classdefNotFound exception
+                        -->
+                        WEB-INF/lib/guava-19.0.jar,
+                        <!-- this jar is being excluded because it currently takes a dependency on AWS S3.
+                             It will be deployed in the container in the tomcat lib directory. So the jar can be
+                             replaced without having to redeploy the application
+
+                        WEB-INF/lib/LoadSecureProperties-Common-*.jar -->
+                    </packagingExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-tomcat-zip-assembly</id>
+                        <!-- we must specify the phase because it is defaulted to "none" so it won't interfere with api XSD unpacking -->
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- parse the version number so we can zero-pad with groovy (see BuildCommon pluginManagement) -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
+            <!--  groovy plugin used to derive zero-padded version for the Tomcat context.xml (see BuildCommon pluginManagement) -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>groovy-maven-plugin</artifactId>
+            </plugin>
+            <!-- maven-assembly used again to assemble a zip file (see BuildCommon pluginManagement) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+            <!-- default tomcat deployment plugin (see BuildCommon pluginManagement) -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <configuration>
+                    <path>/</path>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+</project>

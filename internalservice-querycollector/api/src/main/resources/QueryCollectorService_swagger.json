@@ -1,0 +1,162 @@
+{
+  "basePath": "/services",
+  "swagger": "2.0",
+  "info": {
+    "version": "${project.version}",
+    "title": "${project.parent.artifactId}",
+    "description": "${project.description}"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/queryCollector": {
+      "get": {
+        "operationId": "onAction",
+        "summary": "Triggers a collection action",
+        "description": "This will invoke the appropriate action for the metric collection process.",
+        "parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "type": "string",
+            "description": "This will indicate if the action is configure, collect or shutdown.",
+            "required": true
+          }
+        ],
+        "tags": [
+          "queryCollector"
+        ],
+        "responses": {
+          "200": {
+            "description": "Action performed"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/FaultDetail"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/FaultDetail"
+            }
+          }
+        }
+      }
+    },
+    "/queryCollector/test": {
+      "get": {
+        "operationId": "onTest",
+        "summary": "Triggers test action to make sure the collector is healthy",
+        "description": "This will invoke the onTest method.",
+        "parameters": [
+        ],
+        "tags": [
+          "queryCollector"
+        ],
+        "responses": {
+          "200": {
+            "description": "Test performed",
+            "schema": {
+              "$ref": "#/definitions/Test"
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/FaultDetail"
+              }
+            },
+            "500": {
+              "description": "Internal Error",
+              "schema": {
+                "$ref": "#/definitions/FaultDetail"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Test": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "lastCollection": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "FaultDetail": {
+      "type": "object",
+      "properties": {
+        "node": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "trackingKey": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "contextPath": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "validationError": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ValidationError"
+          }
+        },
+        "FaultDetail": {
+          "$ref": "#/definitions/FaultDetail"
+        }
+      }
+    },
+    "ValidationError": {
+      "type": "object",
+      "properties": {
+        "validationCode": {
+          "type": "string"
+        },
+        "Input": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Input"
+          }
+        }
+      }
+    },
+    "Input": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

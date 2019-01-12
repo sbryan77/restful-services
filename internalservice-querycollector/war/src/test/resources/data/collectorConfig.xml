@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config name="MBEAN_COLLECTOR">
+    <collectorConfig>
+        <collectorKey id="Collector 1"/>
+        <dataBusConfig endpoint="http://databus.dev.idb.viasat.io:8080" streamName="denveritmbeandev"/>
+        <collectionInfos>
+            <collectionInfo collectorType="mbean" assignedCollector="test1">
+                <collectionSource versionfilter="ProvisioningVolubill-v4">
+                    <collectionQuery>
+                        https://fcd-provisioningvolubill01.test.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Server,*
+                    </collectionQuery>
+                </collectionSource>
+                <collectInterval interval="500"/>
+                <credentials user="tomcat" password="t0mcAt"/>
+                <metricDefinitions>
+                    <metricDefinition name="WebserviceAverageResponseTime" field="averageResponseTime"
+                                      search="@calc=(totalHandlingTime-cachetotalHandlingTime)/(numInvocations-cacheNumInvocations)">
+                        <tags>
+                            <tag id="host" value="inttca01.sandbox.dev.wdc1.wildblue.net"/>
+                            <tag id="hostGroup" value="inttca01"/>
+                            <tag id="instance" value="fcd-provisioningvolubill01"/>
+                            <tag id="cluster" value="fcd-provisioningvolubill"/>
+                            <tag id="service"
+                                 value="https://fcd-provisioningvolubill01.test.wdc1.wildblue.net:8443/Facade-Provisioning-Volubill/v4/services/ProvisioningFacade"/>
+                            <tag id="version" value="v4"/>
+                        </tags>
+                    </metricDefinition>
+                </metricDefinitions>
+            </collectionInfo>
+        </collectionInfos>
+    </collectorConfig>
+</config>
