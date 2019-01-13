@@ -1,0 +1,9 @@
+com\viasat\common\rs\providers\ContainerRequestInfo.class
+com\viasat\common\rs\providers\CustomContainerFilter.class
+com\viasat\common\rs\providers\CustomContainerFilter$1.class
+com\viasat\common\rs\providers\CustomJacksonJaxbJsonProvider.class
+com\viasat\common\rs\providers\CustomSpanCollector.class
+com\viasat\common\rs\providers\BraveConfig.class
+com\viasat\common\rs\providers\OffsetDateTimeParamConverter.class
+com\viasat\common\rs\providers\CustomClientFilter.class
+com\viasat\common\rs\providers\CustomParamConverterProvider.class
