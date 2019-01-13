@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Project CommonWSHeaderXSD.jar - Types definition XSD, version: 3.1.0-002-SNAPSHOT, build timestamp: 2018-12-25T20:06:30Z -->
+<!-- Project CommonWSHeaderXSD.jar - Types definition XSD, version: 3.1.0-002-SNAPSHOT, build timestamp: 2019-01-13T21:31:47Z -->
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
            xmlns="http://www.wildblue.viasat.com/XMLSchema/v3.0/Header" 
