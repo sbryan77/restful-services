@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.viasat.com/XMLSchema/ApplicationStatus/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.viasat.com/XMLSchema/ApplicationStatus/v1" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+
+	<xs:element name="applicationStatus">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="applicationName" type="xs:string" minOccurs="1" />
+				<xs:element name="version" type="xs:string" minOccurs="1" />
+				<xs:element name="artifactId" type="xs:string" minOccurs="1" />
+				<xs:element name="artifactGroupId" type="xs:string" minOccurs="1" />
+				<xs:element name="buildTimestamp" type="xs:dateTime" minOccurs="1" />
+				<xs:element name="lastRequestTimestamp" type="xs:dateTime" minOccurs="1" />
+				<xs:element name="status" type="xs:string" minOccurs="1" />
+				<xs:element name="resource" type="resource" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="environmentDetail" type="environmentDetail" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="resource">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="1" />
+			<xs:element name="type" type="xs:string" minOccurs="1" /> <!-- APPLICATION DATASOURCE MEMORY -->
+			<xs:element name="status" type="xs:string" minOccurs="1" /> <!-- ADMIN ERROR OK OVERLOAD -->
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="environmentDetail">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="1" />
+			<xs:element name="value" type="xs:string" minOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="loggerInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="appender" type="appenderDetail" minOccurs="0" maxOccurs="unbounded" />			
+				<xs:element name="logger" type="loggerDetail" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="appenderDetail">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="1" />
+			<xs:element name="threshold" type="xs:string" minOccurs="1" />			
+		</xs:sequence>
+	</xs:complexType>	
+	<xs:complexType name="loggerDetail">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="1" />
+			<xs:element name="level" type="xs:string" minOccurs="1" />
+			<xs:element name="appenderName" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>		
+		</xs:sequence>
+	</xs:complexType>	
+</xs:schema>

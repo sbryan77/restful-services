@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.viasat.wildblue</groupId>
+		<artifactId>BuildCommon</artifactId>
+		<version>3.8.0-005-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.viasat.common.applicationstatus</groupId>
+	<artifactId>ApplicationStatusServlet</artifactId>
+	<packaging>jar</packaging>
+	<version>2.3.0-003-SNAPSHOT</version>
+	<name>ApplicationStatusServlet</name>
+
+	<scm>
+		<connection>scm:cvs:pserver:svc_jenkins:@SCVS.WBADDC1.COM:/SoftwareDev:WildBlue/ApplicationStatusServlet</connection>
+		<developerConnection>scm:cvs:pserver:svc_jenkins:@SCVS.WBADDC1.COM:/SoftwareDev:WildBlue/ApplicationStatusServlet</developerConnection>
+  </scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<!-- For excluding the Common XSDs -->
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>Common</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.viasat.wildblue.common</groupId>
+					<artifactId>CommonLocationXSD</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.viasat.wildblue.common</groupId>
+					<artifactId>CommonDataXSD</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.viasat.wildblue.common</groupId>
+					<artifactId>CommonWSExceptionXSD</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.viasat.wildblue.common</groupId>
+					<artifactId>CommonWSFaultXSD</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.viasat.wildblue.common</groupId>
+					<artifactId>CommonWSHeaderXSD</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.cxf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- For GenericDatabaseConnectionCheck to get connection from EntityManagerFactories -->
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+		</dependency>
+		<!-- JAXB (XML) support -->
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+		</dependency>
+		<!-- JSON support -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<!-- For LastResponseTime CXF interceptor  -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-tools-common</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.12.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory>
+							<bindingDirectory>${basedir}/src/main/resources/binding</bindingDirectory>
+							<extension>true</extension>
+							<!-- <verbose>true</verbose> -->
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+</project>
