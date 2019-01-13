@@ -1,0 +1,292 @@
+<!DOCTYPE form-validation PUBLIC
+  "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+  "http://commons.apache.org/dtds/validator_1_3_0.dtd">
+
+<!-- Put Common Validation configurations in this file. Any validators with implementations 
+     in the WildBlue/Common project, or forms which map to Objects/ComplexTypes defined in
+     the WildBlue/Common project should have their validation configurations here. 
+     For any validators or form/requests/Object/ComplexTypes which are implemented/defined
+     in a different project, the validation rules and configuration belongs in a project
+     specific validation xml file. 
+-->
+<form-validation>
+    <global>
+        <!-- Alphabetizing is good... -->
+
+        <validator name="dateTodayOrEarlier" 
+                   classname="com.viasat.wildblue.common.validator.DateValidator"
+                   method="validateCurrentOrPastDate" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.dateTodayOrEarlier"/>
+                   
+        <validator name="dateTodayOrLater" 
+                   classname="com.viasat.wildblue.common.validator.DateValidator"
+                   method="validateCurrentOrFutureDate" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.dateTodayOrLater"/>
+                   
+        <validator name="dateTodaysMonthOrLater" 
+                   classname="com.viasat.wildblue.common.validator.DateValidator"
+                   method="validateCurrentOrFutureMonth" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.dateTodayOrLater"/>
+                   
+        <validator name="enum" 
+                   classname="com.viasat.wildblue.common.validator.EnumValidator"
+                   method="validateEnumValueExists" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.ValidatorAction,
+                                 org.apache.commons.validator.Field"
+                   msg="errors.enumValueExists"/>
+                   
+		<validator name="enumCaseInsensitive"
+			classname="com.viasat.wildblue.common.validator.EnumValidator"
+			method="validateEnumValueExistsIgnoreCase"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.ValidatorAction,
+                                 org.apache.commons.validator.Field"
+			msg="errors.enumValueExists" />
+
+        <validator name="email" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateEmail" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.email"/>
+
+        <validator name="isDateTime" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="isDateTime" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.isDateTime"/>
+
+        <validator name="inRangeDouble" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="isInRangeDouble" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.inRange"/>
+
+        <validator name="isInteger" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="isInteger" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.isInteger"/>
+
+        <validator name="isLong" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="isLong" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.isLong"/>
+
+        <validator name="isPositive" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="isPositive" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.isPositive"/>
+
+        <validator name="listMaxSize" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateListMaxSize" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.listMaxSize"/>
+
+        <validator name="maxLength" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateMaxLength" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.maxLength"/>
+
+        <validator name="minLength" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateMinLength" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.minLength"/>
+
+        <validator name="mutuallyExclusive" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateMutuallyExclusive" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.mutuallyExclusive"/>
+
+        <validator name="notEmptyIfPresent" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateNotEmptyIfPresent" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator" 
+                   msg="errors.notEmptyIfPresent"/>
+
+        <validator name="optionalComplexType" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateOptional" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator" 
+                   msg="errors.required"/>
+
+        <validator name="phone" 
+                   classname="com.viasat.wildblue.common.validator.PhoneValidator"
+                   method="validatePhone" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.phone"/>
+
+        <validator name="refData" 
+                   classname="com.viasat.wildblue.common.validator.RefDataValidator"
+                   method="validateRefData" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.refData"/>
+
+        <validator name="region" 
+                   classname="com.viasat.wildblue.common.validator.RegionValidator"
+                   method="validateRegion" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.region"/>
+
+        <validator name="required" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateRequired" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator" 
+                   msg="errors.required"/>
+
+        <validator name="requiredConditional" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateRequiredConditional" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator" 
+                   msg="errors.requiredConditional"/>
+
+        <validator name="requiredOneOfMany" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateRequiredOneOfMany" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator" 
+                   msg="errors.requiredOneOfMany"/>
+
+        <validator name="requiredUnless" 
+                   classname="com.viasat.wildblue.common.validator.CommonValidator"
+                   method="validateRequiredUnless" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator" 
+                   msg="errors.requiredUnless"/>
+
+        <validator name="zipCode" 
+                   classname="com.viasat.wildblue.common.validator.ZipCodeValidator"
+                   method="validateZipcode" 
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field" 
+                   msg="errors.zipcode"/>
+    </global>
+
+    <formset>
+        <form name="Address">
+            <field property="addressLine" depends="required">
+                <arg key="Address.addressLine.displayname"/>
+            </field>
+            <field property="municipality" depends="required">
+                <arg key="Address.municipality.displayname"/>
+            </field>
+            <field property="region" depends="required">
+                <arg key="Address.region.displayname"/>
+            </field>
+            <field property="postalCode" depends="required,zipCode">
+                <arg key="Address.postalCode.displayname"/>
+            </field>
+        </form>
+
+	<form name="GeoPosition">
+            <field property="latitude" depends="required, inRangeDouble">
+                <arg key="GeoPosition.latitude.displayname"/>
+                <arg key="${var:minValue}" resource="false" />
+                <var>
+                    <var-name>minValue</var-name>
+                    <var-value>-90.0000</var-value>
+                </var>
+                    <arg key="${var:maxValue}" resource="false" />
+                <var>
+                    <var-name>maxValue</var-name>
+                    <var-value>90.0000</var-value>
+                </var>
+            </field>
+            <field property="longitude" depends="required, inRangeDouble">
+                <arg key="GeoPosition.longitude.displayname"/>
+                <arg key="${var:minValue}" resource="false" />
+                <var>
+                    <var-name>minValue</var-name>
+                    <var-value>-180.0000</var-value>
+                </var>
+                    <arg key="${var:maxValue}" resource="false" />
+                <var>
+                    <var-name>maxValue</var-name>
+                    <var-value>180.0000</var-value>
+                </var>
+            </field>
+        </form>
+        
+        <form name="Contact">
+            <field property="person" depends="required">
+                <arg key="Contact.person.displayname"/>
+            </field>
+            <field property="contactInfo" depends="required">
+                <arg key="Contact.contactInfo.displayname"/>
+            </field>
+        </form>
+
+        <form name="ContactInfo">
+            <field property="emailAddress" depends="required">
+                <arg key="ContactInfo.emailAddress.displayname"/>
+            </field>
+            <field property="primaryPhone" depends="required">
+                <arg key="ContactInfo.primaryPhone.displayname"/>
+            </field>
+            <field property="contactType" depends="required">
+                <arg key="ContactInfo.contactType.displayname"/>
+            </field>
+        </form>
+
+        <form name="InvokedBy">
+            <field property="username" depends="required">
+                <arg key="InvokedBy.username.displayname"/>
+            </field>
+            <field property="application" depends="required">
+                <arg key="InvokedBy.application.displayname"/>
+            </field>
+        </form>
+ 
+         <form name="Person">
+            <field property="firstName" depends="required">
+                <arg key="Person.firstName.displayname"/>
+            </field>
+            <field property="lastName" depends="required">
+                <arg key="Person.lastName.displayname"/>
+            </field>
+        </form>
+
+        <form name="WildBlueHeader">
+            <field property="invokedBy" depends="required">
+                <arg key="WildBlueHeader.invokedBy.displayname"/>
+            </field>
+        </form>
+
+    </formset>
+
+</form-validation>

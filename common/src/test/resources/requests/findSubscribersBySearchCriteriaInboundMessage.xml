@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Header>
+		<ns3:wildBlueHeader
+			xmlns:ns3="http://www.wildblue.viasat.com/XMLSchema/v3.0/Header"
+			xmlns:ns4="http://www.viasat.com/XMLSchema/v1/Fault"
+			xmlns:ns2="http://www.viasat.com/XMLSchema/v2/webservice/SubscriberSearchService">
+			<ns3:invokedBy>
+				<ns3:username>wball</ns3:username>
+				<ns3:application>PublicWebService-Search</ns3:application>
+			</ns3:invokedBy>
+		</ns3:wildBlueHeader>
+	</soap:Header>
+	<soap:Body>
+		<ns2:findSubscribersBySearchCriteria
+			xmlns:ns2="http://www.viasat.com/XMLSchema/v2/webservice/SubscriberSearchService"
+			xmlns:ns3="http://www.wildblue.viasat.com/XMLSchema/v3.0/Header"
+			xmlns:ns4="http://www.viasat.com/XMLSchema/v1/Fault">
+			<ns2:organization>WildBlue</ns2:organization>
+			<ns2:username>wball</ns2:username>
+			<ns2:firstName>Eric</ns2:firstName>
+			<ns2:lastName>Morris</ns2:lastName>
+			<ns2:maxResults>50</ns2:maxResults>
+		</ns2:findSubscribersBySearchCriteria>
+	</soap:Body>
+</soap:Envelope>

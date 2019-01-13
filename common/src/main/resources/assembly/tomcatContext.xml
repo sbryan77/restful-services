@@ -1,0 +1,2 @@
+<!-- tomcat context definition: the name of this file will override the WAR's default context path -->
+<Context docBase="../deployments/${artifactId}-${version}.war" />

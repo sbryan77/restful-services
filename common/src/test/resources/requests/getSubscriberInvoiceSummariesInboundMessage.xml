@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing">
+	<soap:Header>
+		<wsse:Security
+			xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+			<wsu:Timestamp wsu:Id="Timestamp-aa5e08dd-6502-4698-b663-425e3ef7e0ec"
+				xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+				<wsu:Created>2016-03-03T11:29:38Z</wsu:Created>
+				<wsu:Expires>2016-03-03T11:30:38Z</wsu:Expires>
+			</wsu:Timestamp>
+			<wsse:UsernameToken
+				xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+				wsu:Id="SecurityToken-8a6
+4c010-e65c-4845-af51-0206f4997c50">
+				<wsse:Username>sitelapiuser</wsse:Username>
+				<wsse:Password
+					Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">12345
+				</wsse:Password>
+				<wsse:Nonce>c36hpUvecp9u1fwqIPMynQ==</wsse:Nonce>
+				<wsu:Created>2016-03-03T11:29:38Z</wsu:Created>
+			</wsse:UsernameToken>
+		</wsse:Security>
+		<wildBlueHeader
+			xmlns="http://www.viasat.com/XMLSchema/PublicWebService/v2/PWSHeader">
+			<invokedBy>
+				<username>sitelapiuser</username>
+				<application>WildBlue_App_Ws</application>
+			</invokedBy>
+		</wildBlueHeader>
+		<wsa:Action>urn:#NewOperation</wsa:Action>
+		<wsa:MessageID>
+			urn:uuid:0c4ad3ee-130a-4fab-a342-bc60105d6ab9
+		</wsa:MessageID>
+		<wsa:ReplyTo>
+			<wsa:Address>http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+			</wsa:Address>
+		</wsa:ReplyTo>
+		<wsa:To>https://webservices.test.wildblue.net/FinanceService/v4/services/FinanceService
+		</wsa:To>
+	</soap:Header>
+	<soap:Body>
+		<getSubscriberInvoiceSummaries
+			xmlns="http://www.viasat.com/XMLSchema/PublicWebService/v3/FinanceService">
+			<externalSystemName>MYNET</externalSystemName>
+			<externalAccountReference>0068000000gCx4WAAS</externalAccountReference>
+		</getSubscriberInvoiceSummaries>
+	</soap:Body>
+</soap:Envelope>

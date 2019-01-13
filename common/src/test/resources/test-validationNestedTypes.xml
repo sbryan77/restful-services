@@ -1,0 +1,132 @@
+<!DOCTYPE form-validation PUBLIC
+  "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+  "http://commons.apache.org/dtds/validator_1_3_0.dtd">
+<form-validation>
+	<formset>
+		<!-- From WB_APPLICATION_OWNER.CUSTOMER_SEARCH_PARAMETER_LOG ADDRESS VARCHAR2(102 
+			BYTE) MUNICIPALITY VARCHAR2(102 BYTE) REGION VARCHAR2(102 BYTE) POSTAL_CODE 
+			VARCHAR2(102 BYTE) COUNTRY VARCHAR2(102 BYTE) -->
+		<form name="Address">
+			<field property="addressLine" depends="listMaxSize,maxLength,required">
+				<arg key="Address.addressLine.displayname" />
+				<arg position="1" key="${var:maxListSize}" resource="false"
+					name="listMaxSize" />
+				<var>
+					<var-name>maxListSize</var-name>
+					<var-value>2</var-value>
+				</var>
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>102</var-value>
+				</var>
+			</field>
+			<field property="countryCode" depends="maxLength,required">
+				<arg key="Address.countryCode.displayname" />
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>102</var-value>
+				</var>
+			</field>
+			<field property="municipality" depends="maxLength">
+
+				<arg key="Address.municipality.displaynamee" />
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>102</var-value>
+				</var>
+			</field>
+			<field property="postalCode" depends="zipCode, maxLength, required">
+				<arg key="Address.postalCode.displayname" />
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>102</var-value>
+				</var>
+			</field>
+			<field property="region" depends="maxLength">
+				<arg key="Address.region.displayname" />
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>102</var-value>
+				</var>
+			</field>
+		</form>
+		<form name="CorrectedAddress">
+			<field property="address" depends="required">
+				<arg key="CorrectedAddress.address.displayname" />
+			</field>
+			<field property="taxJurisdictionCode" depends="required">
+				<arg key="CorrectedAddress.taxJurisdictionCode.displayname" />
+			</field>
+		</form>
+		<form name="CorrectedContact">
+			<field property="person" depends="optionalComplexType" />
+
+			<field property="emailAddress" depends="maxLength, email">
+				<arg key="CorrectedContact.emailAddress.displayname" />
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>120</var-value>
+				</var>
+			</field>
+			<field property="primaryPhone" depends="phone">
+				<arg key="CorrectedContact.primaryPhone.displayname" />
+			</field>
+			<field property="secondaryPhone" depends="phone">
+				<arg key="CorrectedContact.secondaryPhone.displayname" />
+			</field>
+			<field property="billingAddress" depends="optionalComplexType" />
+			<field property="serviceAddress" depends="optionalComplexType" />
+		</form>
+		<form name="FindAddressAndTaxJurisdictions">
+			<field property="address" depends="required">
+				<arg key="FindAddressAndTaxJurisdictions.address.displayname" />
+			</field>
+		</form>
+		<form name="Person">
+			<field property="firstName" depends="required">
+				<arg key="Person.firstName.displayname" />
+			</field>
+			<!-- Add length requirements -->
+			<field property="lastName" depends="required">
+				<arg key="Person.lastName.displayname" />
+			</field>
+			<!-- Add length requirements -->
+		</form>
+		<form name="UpdateContacts">
+			<field property="externalAccountReference" depends="maxLength, required">
+				<arg key="UpdateContacts.externalAccountReference.displayname" />
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>80</var-value>
+				</var>
+			</field>
+			<field property="externalSystemName" depends="maxLength, required">
+				<arg key="UpdateContacts.externalSystemName.displayname" />
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<!-- WB_DATA_OWNER.EXTERNAL_SYSTEM.EXTERNAL_SYSTEM -->
+					<var-name>maxLength</var-name>
+					<var-value>80</var-value>
+				</var>
+			</field>
+			<field property="externalTransactionReference" depends="maxLength, required">
+				<arg key="UpdateContacts.externalTransactionReference.displayname" />
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>80</var-value>
+				</var>
+			</field>
+			<field property="correctedContact" depends="required">
+				<arg key="UpdateContacts.correctedContact.displayname" />
+			</field>
+		</form>
+	</formset>
+</form-validation>

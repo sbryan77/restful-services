@@ -1,0 +1,8 @@
+.classpath
+.project
+classes
+target
+eclipse-classes
+.settings
+*output*
+build-number.txt

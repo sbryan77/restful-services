@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC  "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+	- Default SQL error codes for well-known databases.
+	- Can be overridden by definitions in a sql-error-codes.xml file
+	- in the root of the class path.
+	-
+	- If the Database Product Name contains characters that are invalid
+	- to use in the id attribute (like a space) then we need to add a property
+	- named "databaseProductName"/"databaseProductNames" that holds this value.
+	- If this property is present, then it will be used instead of the id for
+	- looking up the error codes based on the current database.
+	-->
+<beans>
+
+
+	<bean id="Oracle" class="org.springframework.jdbc.support.SQLErrorCodes">
+
+		<property name="customTranslations">
+			<list>
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>17041,17166</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.UnmappedParameterException</value>
+					</property>
+				</bean>
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>900,903,904,917,936,942,17006</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.BadSqlGrammarException</value>
+					</property>
+				</bean>	
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>17003</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.InvalidResultSetAccessException</value>
+					</property>
+				</bean>	
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>1</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.DuplicateKeyException</value>
+					</property>
+				</bean>
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>1400,1722,2291,2292</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.DataIntegrityViolationException</value>
+					</property>
+				</bean>
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>17002,17447</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.DataAccessResourceFailureException</value>
+					</property>
+				</bean>	
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>54</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.CannotAcquireLockException</value>
+					</property>
+				</bean>		
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>8177</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.CannotSerializeTransactionException</value>
+					</property>
+				</bean>		
+				<bean class = "org.springframework.jdbc.support.CustomSQLErrorCodesTranslation">
+					<property name="errorCodes">
+						<value>60</value>
+					</property>
+					<property name="exceptionClass">
+						<value>com.viasat.wildblue.common.exception.fault.DeadlockLoserException</value>
+					</property>
+				</bean>	
+			</list>
+		</property>
+	</bean>
+</beans>

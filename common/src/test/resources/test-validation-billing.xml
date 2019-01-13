@@ -1,0 +1,1835 @@
+<!DOCTYPE form-validation PUBLIC
+  "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+  "http://commons.apache.org/dtds/validator_1_3_0.dtd">
+
+<form-validation>
+
+    <global>
+        <validator name="lookupCache"
+            classname="com.viasat.wildblue.facade.billing.validator.LookupCacheValidator"
+            method="validateValueExistsInCache"
+            methodParams="java.lang.Object,
+                                 org.apache.commons.validator.ValidatorAction,
+                                 org.apache.commons.validator.Field"
+            msg="errors.lookupCache" />
+
+        <validator name="isContract"
+            classname="com.viasat.wildblue.facade.billing.validator.ServiceItemValidator"
+            method="validateIsContract"
+            methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+            msg="errors.serviceItemIsContract" />
+
+        <validator name="billCycleDaysOfMonth"
+            classname="com.viasat.wildblue.facade.billing.validator.BillCycleDateValidator"
+            method="validateIsValidDayOfMonth"
+            methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+            msg="errors.billCycleDateDayOfMonth" />
+
+        <validator name="pendingAdjustments"
+            classname="com.viasat.wildblue.facade.billing.validator.PendingAdjustmentValidator"
+            method="validateAccountHasNoPendingAdjustments"
+            methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+            msg="errors.hasPendingAdjustments" />
+
+        <validator name="newServiceItemRef"
+            classname="com.viasat.wildblue.facade.billing.validator.ServiceItemValidator"
+            method="validateServiceItemRefIsNew"
+            methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+            msg="errors.serviceItemRefIsNew" />
+
+<!--
+        <validator name="mappedWBData"
+                   classname="com.viasat.wildblue.facade.billing.validator.MappedWildBlueDataValidator"
+                   method="validateValueExistsInCache"
+                   methodParams="java.lang.Object,
+                                 org.apache.commons.validator.ValidatorAction,
+                                 org.apache.commons.validator.Field"
+                   msg="errors.lookupCache"/>
+-->
+    </global>
+
+    <formset>
+        <form name="addCustomerAndAccount">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceProviderType" depends="required, lookupCache">
+                <arg key="serviceProviderType" />
+                <var>
+                    <var-name>lookupCacheName</var-name>
+                    <var-value>wbMarketSegments</var-value>
+                </var>
+            </field>
+            <field property="customerType" depends="required, lookupCache">
+                <arg key="customerType" />
+                <var>
+                    <var-name>lookupCacheName</var-name>
+                    <var-value>wbCustomerTypes</var-value>
+                </var>
+            </field>
+            <field property="customerContact" depends="required">
+                <arg key="requestParam.customerContact.displayname" />
+            </field>
+            <field property="accountContact" depends="required">
+                <arg key="requestParam.accountContact.displayname" />
+            </field>
+            <field property="accountContactRBFullName" depends="maxLength">
+                <arg key="requestParam.rbAccountContactFullName.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>40</var-value>
+                </var>
+            </field>
+            <field property="recurringPaymentMethod" depends="required">
+                <arg key="requestParam.recurringPaymentMethod.displayname" />
+            </field>
+            <field property="paymentMethod" depends="optionalComplexType">
+                <arg key="requestParam.oneTimePaymentMethod.displayname" />
+            </field>
+        </form>
+
+        <form name="cancelAddCustomerAndAccount">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="addDiscountToServiceItem">
+            <field property="targetServiceItemReference" depends="required, maxLength">
+                <arg key="requestParam.targetServiceItemReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItem" depends="required">
+                <arg key="requestParam.serviceItem.displayname" />
+            </field>
+            <field property="startDate" depends="required">
+                <arg key="requestParam.startDate.displayname" />
+            </field>
+        </form>
+
+        <form name="addServiceAgreement">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+            </field>
+            <field property="salesChannelType" depends="required">
+                <arg key="requestParam.salesChannelType.displayname" />
+            </field>
+            <field property="equipmentPlan" depends="required">
+                <arg key="requestParam.equipmentPlan.displayname" />
+            </field>
+            <field property="soldBy" depends="required">
+                <arg key="requestParam.soldBy.displayname" />
+            </field>
+            <field property="serviceContact" depends="required">
+                <arg key="requestParam.serviceContact.displayname" />
+            </field>
+            <field property="taxJurisdictionCode" depends="required">
+                <arg key="requestParam.taxJurisdictionCode.displayname" />
+            </field>
+        </form>
+
+        <form name="addServiceAgreementHierarchy">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+            </field>
+            <field property="salesChannelType" depends="required">
+                <arg key="requestParam.salesChannelType.displayname" />
+            </field>
+            <field property="equipmentPlan" depends="required">
+                <arg key="requestParam.equipmentPlan.displayname" />
+            </field>
+            <field property="soldBy" depends="required">
+                <arg key="requestParam.soldBy.displayname" />
+            </field>
+            <field property="serviceContact" depends="required">
+                <arg key="requestParam.serviceContact.displayname" />
+            </field>
+            <field property="serviceItemBase" depends="optionalComplexType, newServiceItemRef">
+                <arg key="requestParam.serviceItem.displayname" />
+            </field>
+            <field property="oneTimeCharge" depends="optionalComplexType">
+                <arg key="requestParam.oneTimeCharge.displayname" />
+            </field>
+        </form>
+
+        <form name="addServiceItem">
+            <field property="" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="ServiceItemBase" depends="required, newServiceItemRef">
+                <arg key="requestParam.serviceItemBase.displayname" />
+            </field>
+            <field property="startDate" depends="required">
+                <arg key="requestParam.startDate.displayname" />
+            </field>
+        </form>
+
+        <form name="getAccountOneTimeCharges">
+            <field property="accountReference" depends="required">
+                <arg key="requestParam.accountReference.displayname" />
+            </field>
+        </form>
+
+        <form name="getAdjustmentHistory">
+            <field property="accountReference" depends="required">
+                <arg key="requestParam.accountReference.displayname" />
+            </field>
+        </form>
+
+        <form name="getAgingDetails">
+            <field property="accountReference" depends="required">
+                <arg key="requestParam.accountReference.displayname" />
+            </field>
+        </form>
+
+        <form name="authorizeCreditCard">
+            <!-- optional field -->
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <!-- optional field -->
+            <field property="accountReference" depends="maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="creditCard" depends="required">
+                <arg key="CreditCard" />
+            </field>
+            <field property="creditCardAddress" depends="requiredConditional">
+                <arg key="CreditCardAddress" />
+                <arg key="${var:conditionField}" resource="false" />
+                <arg key="${var:conditionFieldValue}" resource="false" />
+                <var>
+                    <var-name>conditionField</var-name>
+                    <var-value>creditCard.methodOfPayment</var-value>
+                </var>
+                <var>
+                    <var-name>conditionFieldValue</var-name>
+                    <var-value>DISCOVER</var-value>
+                </var>
+            </field>
+            <field property="amount" depends="required">
+                <arg key="amount" />
+            </field>
+            <field property="reason" depends="required">
+                <arg key="Reason" />
+            </field>
+        </form>
+
+        <form name="authorizeCreditCardZeroAmount">
+            <!-- optional field -->
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <!-- optional field -->
+            <field property="accountReference" depends="maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="creditCard" depends="required">
+                <arg key="CreditCard" />
+            </field>
+            <field property="creditCardAddress" depends="requiredConditional">
+                <arg key="CreditCardAddress" />
+                <arg key="${var:conditionField}" resource="false" />
+                <arg key="${var:conditionFieldValue}" resource="false" />
+                <var>
+                    <var-name>conditionField</var-name>
+                    <var-value>creditCard.methodOfPayment</var-value>
+                </var>
+                <var>
+                    <var-name>conditionFieldValue</var-name>
+                    <var-value>DISCOVER</var-value>
+                </var>
+            </field>
+            <field property="reason" depends="required">
+                <arg key="Reason" />
+            </field>
+        </form>
+
+        <form name="createDispute">
+            <field property="accountReference" depends="required">
+                <arg key="requestParam.accountReference.displayname" />
+            </field>
+            <field property="disputeRefundable" depends="required">
+                <arg key="requestParam.disputeRefundable.displayname" />
+            </field>
+            <field property="disputeItem" depends="required">
+                <arg key="requestParam.disputeItem.displayname" />
+            </field>
+        </form>
+
+        <form name="approvePendingDispute">
+
+        </form>
+
+        <form name="disconnectAccount">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="applyEarlyTermSurcharge" depends="required">
+                <arg key="requestParam.applyEarlyTermSurcharge.displayname" />
+            </field>
+            <field property="startDate" depends="required">
+                <arg key="requestParam.startDate.displayname" />
+            </field>
+            <!-- Note, rbmAccountNum is looked up using the account
+           	reference, so it does not need to be checked for
+           	length, type, etc. This field is used to perform validation
+           	required by Jira BF-406 -->
+            <field property="rbmAccountNum" depends="required, pendingAdjustments">
+                <!-- This arg is used by the message formatter in the 'required' validator. -->
+                <arg key="requestParam.pendingAdjustments.rbmAccountNum.displayname" />
+            </field>
+
+        </form>
+
+        <form name="disconnectServiceAgreement">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceItemReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="disconnectReason" depends="required, maxLength">
+                <arg key="requestParam.disconnectReason.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="applyEarlyTermSurcharge" depends="required">
+                <arg key="requestParam.applyEarlyTermSurcharge.displayname" />
+            </field>
+            <field property="startDate" depends="required">
+                <arg key="requestParam.startDate.displayname" />
+            </field>
+            <!-- Note, rbmAccountNum is looked up using the account
+           	reference, so it does not need to be checked for
+           	length, type, etc. This field is used to perform validation
+           	required by Jira BF-406 -->
+            <field property="rbmAccountNum" depends="required, pendingAdjustments">
+                <!-- This arg is used by the message formatter in the 'required' validator. -->
+                <arg key="requestParam.pendingAdjustments.rbmAccountNum.displayname" />
+            </field>
+        </form>
+
+        <form name="disconnectServiceItem">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemReference" depends="required, maxLength">
+                <arg key="requestParam.serviceItemReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="applyEarlyTermSurcharge" depends="required">
+                <arg key="requestParam.applyEarlyTermSurcharge.displayname" />
+            </field>
+            <field property="startDate" depends="required">
+                <arg key="requestParam.startDate.displayname" />
+            </field>
+        </form>
+
+        <form name="getAccount">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getAccountFinancialSummary">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getAccountFinancialTransactions">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getAccountHierarchy">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getCustomer">
+            <field property="customerReference" depends="required, maxLength">
+                <arg key="requestParam.customerReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+        <form name="getContracts">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getCurrentPaymentMethod">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getDisputeHistory">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getEventHistory">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="invoiceSequences" depends="required">
+                <arg key="requestParam.invoiceSequence.displayname" />
+            </field>
+        </form>
+
+        <form name="getFinancialTransactionHistory">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getInvoiceDetails">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="invoiceSequence" depends="required">
+                <arg key="requestParam.invoiceSequence.displayname" />
+            </field>
+        </form>
+        <form name="getInvoiceDetailsExpanded">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="invoiceSequence" depends="required">
+                <arg key="requestParam.invoiceSequence.displayname" />
+            </field>
+        </form>
+        <form name="getInvoiceList">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getInvoiceSummaries">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getInvoiceSummariesByList">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="invoiceSequence" depends="required">
+                <arg key="requestParam.invoiceSequence.displayname" />
+            </field>
+        </form>
+
+        <form name="getInvoicesByList">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="invoiceSequence" depends="required">
+                <arg key="requestParam.invoiceSequence.displayname" />
+            </field>
+        </form>
+
+        <form name="getInvoiceSummariesRange">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="fromDate" depends="required">
+                <arg key="requestParam.fromDate.displayname" />
+            </field>
+            <field property="toDate" depends="required">
+                <arg key="requestParam.toDate.displayname" />
+            </field>
+        </form>
+
+        <form name="getLastDunningAction">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getLedgerSummary">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getOneTimeChargeHistory">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getPaymentHistory">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getPaymentMethodActionTypes" />
+
+        <form name="getServiceAgreement">
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getServiceProvider">
+            <field property="sourceSystemReference" depends="required">
+                <arg key="requestParam.sourceSystemReference.displayname" />
+            </field>
+            <field property="salesChannelType" depends="required">
+                <arg key="requestParam.salesChannelType.displayname" />
+            </field>
+        </form>
+
+        <form name="getTargetSystemAccountNumber">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="getTaxJurisdictions">
+            <field property="zipCode" depends="required, zipCode">
+                <arg key="requestParam.zipCode.displayname" />
+            </field>
+        </form>
+
+        <form name="transitionServiceAgreement">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="transitionServiceAgreement.transactionReference" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="transitionServiceAgreement.accountReference" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+           	<!-- Note, rbmAccountNum is looked up using the old service
+           	agreement reference, so it does not need to be checked for
+           	length, type, etc. This field is used to perform validation
+                required by Jira BF-406 -->
+            <field property="rbmAccountNum" depends="required, pendingAdjustments">
+                <!-- This arg is used by the message formatter in the 'required' validator. -->
+                <arg key="requestParam.pendingAdjustments.rbmAccountNum.displayname" />
+            </field>
+            <field property="oldServiceAgreementReference" depends="required">
+                <arg key="transitionServiceAgreement.oldServiceAgreementReference" />
+            </field>
+            <field property="serviceAgreementReference" depends="required">
+                <arg key="transitionServiceAgreement.serviceAgreementReference" />
+            </field>
+            <field property="salesChannelType" depends="required">
+                <arg key="transitionServiceAgreement.salesChannelType" />
+            </field>
+            <field property="equipmentPlan" depends="required">
+                <arg key="transitionServiceAgreement.equipmentPlan" />
+            </field>
+            <field property="soldBy" depends="required">
+                <arg key="transitionServiceAgreement.soldBy" />
+            </field>
+            <field property="serviceItem" depends="optionalComplexType, newServiceItemRef">
+                <arg key="transitionServiceAgreement.serviceItem" />
+            </field>
+            <field property="oneTimeCharge" depends="optionalComplexType">
+                <arg key="transitionServiceAgreement.oneTimeCharge" />
+            </field>
+        </form>
+
+        <form name="updateAccountAddress">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="address" depends="required">
+                <arg key="requestParam.address.displayname" />
+            </field>
+            <field property="isInCityLimits" depends="required">
+                <arg key="requestParam.isInCityLimits.displayname" />
+            </field>
+        </form>
+
+        <form name="updateAccountContactEmail">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="updateAccountContactName">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountContactRBFullName" depends="maxLength">
+                <arg key="requestParam.rbAccountContactFullName.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>40</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="updateAccountContactPhone">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="phonePrimary" depends="required, phone">
+                <arg key="requestParam.phonePrimary.displayname" />
+            </field>
+            <field property="phoneSecondary" depends="phone">
+                <arg key="requestParam.phoneSecondary.displayname" />
+            </field>
+        </form>
+
+        <form name="resumeAllServiceAgreements">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="resumeDate" depends="required">
+                <arg key="requestParam.resumeDate.displayname" />
+            </field>
+        </form>
+
+        <form name="suspendAllServiceAgreements">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="suspendDate" depends="required">
+                <arg key="requestParam.suspendDate.displayname" />
+            </field>
+            <field property="reason" depends="required">
+                <arg key="requestParam.suspendReason.displayname" />
+            </field>
+        </form>
+
+        <form name="suspendAllServiceAgreementsPendingAdjustmentsPerServiceAgreement">
+            <!-- Note: This form is used in a 2nd validation step for the validateSuspendAllServiceAgreements
+			operation.  Each service agreement is checked for pendingAdjustments one by one
+			using this validation form, which links to the 'pendingAdjustments' validator.
+			See Jira BF-406
+			-->
+            <field property="rbmAccountNum" depends="required, pendingAdjustments">
+                <!-- This arg is used by the message formatter in the 'required' validator. -->
+                <arg key="requestParam.pendingAdjustments.rbmAccountNum.displayname" />
+            </field>
+        </form>
+
+        <form name="transitionServiceItem">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemReference" depends="required, maxLength">
+                <arg key="requestParam.serviceItemReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemBase" depends="required">
+                <arg key="requestParam.serviceItemBase.displayname" />
+            </field>
+            <field property="startDate" depends="required">
+                <arg key="requestParam.startDate.displayname" />
+            </field>
+
+           	<!-- Note, rbmAccountNum is looked up using the old service
+           	item reference, so it does not need to be checked for
+           	length, type, etc. This field is used to perform validation
+                required by Jira BF-406 -->
+            <field property="rbmAccountNum" depends="required, pendingAdjustments">
+                <!-- This arg is used by the message formatter in the 'required' validator. -->
+                <arg key="requestParam.pendingAdjustments.rbmAccountNum.displayname" />
+            </field>
+        </form>
+
+        <form name="updateServiceContactPhone">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="phonePrimary" depends="required, phone">
+                <arg key="requestParam.phonePrimary.displayname" />
+            </field>
+            <field property="phoneSecondary" depends="phone">
+                <arg key="requestParam.phoneSecondary.displayname" />
+            </field>
+        </form>
+
+        <form name="updateCustomerAddress">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="customerReference" depends="required, maxLength">
+                <arg key="requestParam.customerReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="address" depends="required">
+                <arg key="requestParam.address.displayname" />
+            </field>
+           <field property="isInCityLimits" depends="required">
+                <arg key="requestParam.isInCityLimits.displayname" />
+            </field>
+        </form>
+
+        <form name="updateCustomerContactEmail">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="customerReference" depends="required, maxLength">
+                <arg key="requestParam.customerReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="emailAddress" depends="required, maxLength">
+                <arg key="requestParam.emailAddress.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="updateCustomerContactName">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="customerReference" depends="required, maxLength">
+                <arg key="requestParam.customerReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="person" depends="required">
+                <arg key="requestParam.person.displayname" />
+            </field>
+        </form>
+
+        <form name="updateCustomerContactPhone">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="customerReference" depends="required, maxLength">
+                <arg key="requestParam.customerReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="phonePrimary" depends="required, phone">
+                <arg key="requestParam.phonePrimary.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+            </field>
+            <field property="phoneSecondary" depends="phone">
+                <arg key="requestParam.phoneSecondary.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+            </field>
+        </form>
+
+        <form name="updatePaymentMethod">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="paymentMethod" depends="required">
+                <arg key="requestParam.paymentMethod.displayname" />
+            </field>
+        </form>
+
+        <form name="updateServiceContactEmail">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="emailAddress" depends="email">
+                <arg key="requestParam.emailAddress.displayname" />
+            </field>
+        </form>
+
+        <form name="updateServiceContactName">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="person" depends="required">
+                <arg key="requestParam.person.displayname" />
+            </field>
+        </form>
+
+        <form name="updateEquipment">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="deviceIdentifier" depends="required">
+                <arg key="requestParam.deviceIdentifier.displayname" />
+            </field>
+            <field property="ratingEventType" depends="required">
+                <arg key="requestParam.ratingEventType.displayname" />
+            </field>
+        </form>
+
+        <form name="updateBillCycle">
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="startDate" depends="required">
+                <arg key="requestParam.startDate.displayname" />
+            </field>
+            <field property="startDateDayOfMonth" depends="inRangeDouble, billCycleDaysOfMonth">
+                <arg key="startDate[DAY_OF_MONTH]" resource="false" />
+                <arg key="${var:minValue}" resource="false" />
+                <arg key="${var:maxValue}" resource="false" />
+                <var>
+                    <var-name>minValue</var-name>
+                    <var-value>1</var-value>
+                </var>
+                <var>
+                    <var-name>maxValue</var-name>
+                    <var-value>28</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="updateContract">
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="startDate" depends="required">
+                <arg key="requestParam.startDate.displayname" />
+            </field>
+            <field property="newContractServiceItem" depends="required, isContract, newServiceItemRef">
+                <arg key="requestParam.serviceItemBase.displayname" />
+            </field>
+        </form>
+
+        <form name="getServiceAgreementOneTimeCharges">
+            <field property="serviceAgreementReference" depends="required">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+            </field>
+        </form>
+
+        <form name="addAccountOneTimeCharge">
+            <field property="mainInputElement" depends="required">
+                <arg key="requestParam.mainInputElement.displayname" />
+            </field>
+            <field property="accountReference" depends="required, maxLength">
+                <arg key="requestParam.accountReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="oneTimeChargeReference" depends="required">
+                <arg key="requestParam.oneTimeChargeReference.displayname" />
+            </field>
+            <field property="oneTimeChargeType" depends="required">
+                <arg key="requestParam.oneTimeChargeType.displayname" />
+            </field>
+            <field property="amount" depends="required">
+                <arg key="requestParam.oneTimePaymentAmount.displayname" />
+            </field>
+        </form>
+
+        <form name="addServiceAgreementOneTimeCharge">
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="oneTimeChargeReference" depends="required">
+                <arg key="requestParam.oneTimeChargeReference.displayname" />
+            </field>
+            <field property="oneTimeChargeType" depends="required">
+                <arg key="requestParam.oneTimeChargeType.displayname" />
+            </field>
+            <field property="amount" depends="required">
+                <arg key="requestParam.oneTimePaymentAmount.displayname" />
+            </field>
+        </form>
+
+        <form name="updateEquipmentPlan">
+            <field property="transactionReference" depends="maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="equipmentPlan" depends="required">
+                <arg key="requestParam.equipmentPlan.displayname" />
+            </field>
+            <field property="serviceItem" depends="optionalComplexType, newServiceItemRef">
+                <arg key="requestParam.serviceItem.displayname" />
+            </field>
+        </form>
+
+        <form name="createOneTimePayment">
+            <field property="accountReference" depends="required">
+                <arg key="requestParam.accountReference.displayname" />
+            </field>
+            <field property="paymentMethodActionType" depends="required, enum">
+                <arg key="requestParam.oneTimePaymentMethodActionType.displayname" />
+                <var>
+                    <var-name>enumClass</var-name>
+                    <var-value>com.viasat.wildblue.facade.billing.rbm.util.PaymentMethodActionTypeEnum</var-value>
+                </var>
+            </field>
+            <field property="amount" depends="required">
+                <arg key="requestParam.oneTimePaymentAmount.displayname" />
+            </field>
+            <field property="paymentMethod" depends="requiredUnless">
+                <arg key="requestParam.oneTimePaymentMethod.displayname" />
+                <arg key="${var:conditionField}" resource="false" />
+                <arg key="${var:conditionFieldValue}" resource="false" />
+                <var>
+                    <var-name>conditionField</var-name>
+                    <var-value>paymentMethodActionType</var-value>
+                </var>
+                <var>
+                    <var-name>conditionFieldValue</var-name>
+                    <var-value>USE_RECURRING_PAYMENT_METHOD</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="Address">
+            <!--
+             We need to take Address Line 1, 2, City, State, County as façade inputs
+             and convert to the 5 different address lines in RB.
+                (M) Address Line 1 = 1,
+                (O) Address Line 2 = 2,
+                (M) City = 3,
+                (O) County = 5,
+                (M) State = 4.
+             -->
+            <field property="addressLine" depends="required, maxLength, listMaxSize">
+                <arg key="Address.addressLine.displayname" />
+                <arg position="1" key="${var:maxListSize}" resource="false" name="listMaxSize" />
+                <arg key="${var:maxListSize}" resource="false" />
+                <var>
+                    <var-name>maxListSize</var-name>
+                    <var-value>2</var-value>
+                </var>
+            </field>
+            <field property="municipality" depends="required">
+                <arg key="Address.municipality.displayname" />
+            </field>
+            <field property="region" depends="required">
+                <arg key="Address.region.displayname" />
+            </field>
+            <field property="postalCode" depends="required, zipCode">
+                <arg key="Address.postalCode.displayname" />
+            </field>
+            <field property="countryCode" depends="required">
+                <arg key="Address.countryCode.displayname" />
+            </field>
+            <field property="taxJurisdictionCode" depends="required, maxLength">
+                <arg key="requestParam.taxJurisdictionCode.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+        </form>
+        <form name="Contact">
+            <field property="emailAddress" depends="required">
+                <arg key="ContactInfo.emailAddress.displayname" />
+            </field>
+            <field property="primaryPhone" depends="required">
+                <arg key="ContactInfo.primaryPhone.displayname" />
+            </field>
+            <field property="person" depends="required">
+                <arg key="Contact.person.displayname" />
+            </field>
+            <field property="address" depends="required">
+                <arg key="Contact.address.displayname" />
+            </field>
+        </form>
+
+        <form name="Contract">
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="contractType" depends="required">
+                <arg key="Contract.contractType.displayname" />
+            </field>
+            <field property="contractTerm" depends="required">
+                <arg key="Contract.contractTerm.displayname" />
+            </field>
+            <field property="contractTermUnits" depends="required, enum">
+                <arg key="Contract.contractTermUnits.displayname" />
+                <var>
+                    <var-name>enumClass</var-name>
+                    <var-value>com.viasat.wildblue.facade.billing.rbm.util.ContractTermUnitsEnum</var-value>
+                </var>
+                <var>
+                    <var-name>enumValueAccessor</var-name>
+                    <var-value>getWbValue</var-value>
+                </var>
+            </field>
+        </form>
+        <form name="CreditCard">
+            <field property="cardNumber" depends="required">
+                <arg key="creditCard.cardNumber.displayname" />
+            </field>
+            <field property="CVV" depends="maxLength, minLength">
+                <arg key="creditCard.CVV" />
+                <arg key="${var:maxLength}" resource="false" name="maxLength" />
+                <arg key="${var:minLength}" resource="false" name="minLength" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>4</var-value>
+                </var>
+                <var>
+                    <var-name>minLength</var-name>
+                    <var-value>3</var-value>
+                </var>
+            </field>
+            <field property="expirationDate" depends="required, dateTodaysMonthOrLater">
+                <arg key="creditCard.expirationDate.displayname" />
+            </field>
+            <field property="accountHolder" depends="required">
+                <arg key="creditCard.accountHolder.displayname" />
+            </field>
+            <field property="zipCode" depends="required, zipCode">
+                <arg key="creditCard.zipCode.displayname" />
+            </field>
+            <field property="methodOfPayment" depends="required, lookupCache">
+                <arg key="creditCard.methodOfPayment.displayname" />
+                <var>
+                    <var-name>lookupCacheName</var-name>
+                    <var-value>wbCreditCardTypes</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="EFT">
+            <field property="bankAccountNumber" depends="required">
+                <arg key="eft.bankAccountNumber.displayname" />
+            </field>
+            <field property="bankAccountHolder" depends="required">
+                <arg key="eft.bankAccountHolder.displayname" />
+            </field>
+            <field property="bankCode" depends="required, maxLength">
+                <arg key="eft.bankCode.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>10</var-value>
+                </var>
+            </field>
+            <field property="paymentType" depends="required, enum">
+                <arg key="eft.paymentType.displayname" />
+                <var>
+                    <var-name>enumClass</var-name>
+                    <var-value>com.viasat.wildblue.common.data.EFTPaymentTypeEnum</var-value>
+                </var>
+                <var>
+                    <var-name>enumValueAccessor</var-name>
+                    <var-value>getWildBlueName</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="EquipmentPlanServiceItem">
+            <field property="serviceItemReference" depends="required, maxLength">
+                <arg key="requestParam.serviceItemReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemType" depends="required, maxLength">
+                <arg key="requestParam.serviceItemType.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemId" depends="required">
+                <arg key="requestParam.serviceItemId.displayname" />
+            </field>
+            <field property="serviceItemPricePlanId" depends="required">
+                <arg key="requestParam.serviceItemPricePlanId.displayname" />
+            </field>
+        </form>
+
+        <form name="Location">
+            <field property="address" depends="required">
+                <arg key="Location.address.displayname" />
+            </field>
+        </form>
+
+        <form name="PaymentMethod">
+            <field property="paymentMethodType" depends="required, enum">
+                <arg key="paymentMethod.paymentMethodType.displayname" />
+                <var>
+                    <var-name>enumClass</var-name>
+                    <var-value>com.viasat.wildblue.facade.billing.rbm.util.RbmPaymentMethodEnum</var-value>
+                </var>
+                <var>
+                    <var-name>enumValueAccessor</var-name>
+                    <var-value>getWbPaymentMethodName</var-value>
+                </var>
+            </field>
+            <field property="eft" depends="requiredOneOfMany, mutuallyExclusive">
+                <arg key="${var:fieldSet}" resource="false" />
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>eft, creditCard</var-value>
+                </var>
+            </field>
+            <field property="creditCard" depends="requiredOneOfMany, mutuallyExclusive">
+                <arg key="${var:fieldSet}" resource="false" />
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>eft, creditCard</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="Person">
+            <field property="firstName" depends="required, maxLength">
+                <arg key="Person.firstName.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>40</var-value>
+                </var>
+            </field>
+            <field property="middleName" depends="maxLength">
+                <arg key="Person.middleName.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>40</var-value>
+                </var>
+            </field>
+            <field property="lastName" depends="required, maxLength">
+                <arg key="Person.lastName.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>40</var-value>
+                </var>
+            </field>
+            <field property="suffix" depends="maxLength">
+                <arg key="Person.suffix.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>40</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="ServiceItem">
+            <field property="deviceIdentifier" depends="maxLength">
+                <arg key="requestParam.deviceIdentifier.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="ratingEventType" depends="lookupCache">
+                <arg key="ratingEventType" />
+                <var>
+                    <var-name>lookupCacheName</var-name>
+                    <var-value>eventTypes</var-value>
+                </var>
+                <var>
+                    <var-name>validValueType</var-name>
+                    <var-value>CODE</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemReference" depends="required, maxLength">
+                <arg key="requestParam.serviceItemReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemType" depends="required, maxLength">
+                <arg key="requestParam.serviceItemType.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemId" depends="required">
+                <arg key="requestParam.serviceItemId.displayname" />
+            </field>
+            <field property="serviceItemPricePlanId" depends="required">
+                <arg key="requestParam.serviceItemPricePlanId.displayname" />
+            </field>
+            <field property="contract" depends="optionalComplexType">
+                <arg key="requestParam.contract.displayname" />
+            </field>
+        </form>
+
+        <form name="ServiceItemBase">
+            <field property="deviceIdentifier" depends="maxLength">
+                <arg key="requestParam.deviceIdentifier.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="ratingEventType" depends="lookupCache">
+                <arg key="ratingEventType" />
+                <var>
+                    <var-name>lookupCacheName</var-name>
+                    <var-value>eventTypes</var-value>
+                </var>
+                <var>
+                    <var-name>validValueType</var-name>
+                    <var-value>CODE</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemReference" depends="required, maxLength">
+                <arg key="requestParam.serviceItemReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemType" depends="required, maxLength">
+                <arg key="requestParam.serviceItemType.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceItemId" depends="required">
+                <arg key="requestParam.serviceItemId.displayname" />
+            </field>
+            <field property="serviceItemPricePlanId" depends="required">
+                <arg key="requestParam.serviceItemPricePlanId.displayname" />
+            </field>
+            <field property="contract" depends="optionalComplexType">
+                <arg key="requestParam.contract.displayname" />
+            </field>
+        </form>
+
+        <form name="ServiceAgreementOneTimeChargeInput">
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="oneTimeChargeReference" depends="required, maxLength">
+                <arg key="requestParam.oneTimeChargeReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="oneTimeChargeId" depends="required">
+                <arg key="requestParam.oneTimeChargeId.displayname" />
+            </field>
+            <field property="oneTimeChargeType" depends="required, maxLength">
+                <arg key="requestParam.oneTimeChargeType.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="amount" depends="required">
+                <arg key="requestParam.amount.displayname" />
+            </field>
+        </form>
+
+        <form name="updateContacts">
+            <field property="transactionReference" depends="required, maxLength">
+                <arg key="requestParam.transactionReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceAgreementReference" depends="required, maxLength">
+                <arg key="requestParam.serviceAgreementReference.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="correctedContact" depends="required">
+                <arg key="requestParam.correctedContact.displayname" />
+            </field>
+        </form>
+
+        <form name="CorrectedContact">
+            <field property="person" depends="optionalComplexType"/>		
+            <field property="emailAddress" depends="notEmptyIfPresent, email">
+                <arg key="requestParam.emailAddress.displayname" />
+            </field>
+            <field property="primaryPhone" depends="notEmptyIfPresent, phone">
+                <arg key="requestParam.phonePrimary.displayname" />			
+            </field>
+            <field property="secondaryPhone" depends="phone">
+                <arg key="requestParam.phoneSecondary.displayname" />
+            </field>
+        </form>
+
+        <form name="billingAddress">
+            <field property="billingAddressLine" depends="required, maxLength, listMaxSize">
+                <arg key="updateContacts.billing.address.addressLine.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+                <arg position="1" key="${var:maxListSize}" resource="false" name="listMaxSize" />
+                <arg key="${var:maxListSize}" resource="false" />
+                <var>
+                    <var-name>maxListSize</var-name>
+                    <var-value>2</var-value>
+                </var>
+            </field>
+            <field property="billingMunicipality" depends="required">
+                <arg key="updateContacts.billing.address.municipality.displayname" />
+            </field>
+            <field property="billingRegion" depends="required">
+                <arg key="updateContacts.billing.address.region.displayname" />
+            </field>
+            <field property="billingPostalCode" depends="required, zipCode">
+                <arg key="updateContacts.billing.address.postalCode.displayname" />
+            </field>
+            <field property="billingCountryCode" depends="required">
+                <arg key="updateContacts.billing.address.countryCode.displayname" />
+            </field>
+            <field property="billingTaxJurisdictionCode" depends="required, maxLength">
+                <arg key="updateContacts.billing.address.taxJurisdictionCode.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="billingIsInCityLimits" depends="required">
+                <arg key="updateContacts.billing.address.isInCityLimits.displayname" />
+            </field>
+        </form>
+
+        <form name="serviceAddress">
+            <field property="serviceAddressLine" depends="required, maxLength, listMaxSize">
+                <arg key="updateContacts.service.address.addressLine.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+                <arg position="1" key="${var:maxListSize}" resource="false" name="listMaxSize" />
+                <arg key="${var:maxListSize}" resource="false" />
+                <var>
+                    <var-name>maxListSize</var-name>
+                    <var-value>2</var-value>
+                </var>
+            </field>         
+            <field property="serviceMunicipality" depends="required">
+                <arg key="updateContacts.service.address.municipality.displayname" />
+            </field>
+            <field property="serviceRegion" depends="required">
+                <arg key="updateContacts.service.address.region.displayname" />
+            </field>
+            <field property="servicePostalCode" depends="required, zipCode">
+                <arg key="updateContacts.service.address.postalCode.displayname" />
+            </field>
+            <field property="serviceCountryCode" depends="required">
+                <arg key="updateContacts.service.address.countryCode.displayname" />
+            </field>
+            <field property="serviceTaxJurisdictionCode" depends="required, maxLength">
+                <arg key="updateContacts.service.address.taxJurisdictionCode.displayname" />
+                <arg key="${var:maxLength}" resource="false" />
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>80</var-value>
+                </var>
+            </field>
+            <field property="serviceIsInCityLimits" depends="required">
+                <arg key="updateContacts.service.address.isInCityLimits.displayname" />
+            </field>
+        </form>
+    </formset>
+
+</form-validation>

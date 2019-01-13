@@ -1,0 +1,118 @@
+[  
+   {  
+      "contactId":39826977,
+      "firstName":"Kim",
+      "middleName":"k",
+      "lastName":"ms",
+      "suffix":"Ms",
+      "businessName":null,
+      "contactRoles":[  
+         {  
+            "contactRoleId":39816977,
+            "contactRoleType":[  
+               {  
+                  "contactRoleTypeId":3,
+                  "contactRoleType":"SERVICE_AGREEMENT_CONTACT",
+                  "displayName":"Service Agreement Contact",
+                  "description":"The service agreement contact role type."
+               }
+            ],
+            "contactId":39826977,
+            "accountId":null,
+            "serviceAgreementId":403585082,
+            "state":"ACTIVE",
+            "startDate":"2017-02-07T18:44:13Z",
+            "endDate":"2099-12-31T00:00:00Z"
+         }
+      ],
+      "emailAddresses":[  
+         {  
+            "emailAddressId":22074569,
+            "contactMedium":[  
+               {  
+                  "contactMediumId":66308505,
+                  "contactMediumType":[  
+                     {  
+                        "contactMediumTypeId":3,
+                        "contactMediumType":"EMAIL_ADDRESS",
+                        "displayName":"Email Address",
+                        "description":"The email address contact medium type."
+                     }
+                  ],
+                  "contactId":39826977,
+                  "state":"ACTIVE",
+                  "startDate":"2017-02-07T18:44:13Z",
+                  "endDate":"2099-12-31T00:00:00Z"
+               }
+            ],
+            "emailAddress":"dd@gail.com",
+            "state":"ACTIVE",
+            "startDate":"2017-02-07T18:44:13Z",
+            "endDate":"2099-12-31T00:00:00Z"
+         }
+      ],
+      "phoneNumbers":[  
+         {  
+            "phoneNumberId":22126369,
+            "contactMedium":[  
+               {  
+                  "contactMediumId":66308506,
+                  "contactMediumType":[  
+                     {  
+                        "contactMediumTypeId":2,
+                        "contactMediumType":"PHONE_NUMBER",
+                        "displayName":"Phone Number",
+                        "description":"The phone number contact medium type."
+                     }
+                  ],
+                  "contactId":39826977,
+                  "state":"ACTIVE",
+                  "startDate":"2017-02-07T18:44:13Z",
+                  "endDate":"2099-12-31T00:00:00Z"
+               }
+            ],
+            "primaryPhoneNumber":"2166666662",
+            "secondaryPhoneNumber":"6576570085",
+            "state":"ACTIVE",
+            "startDate":"2017-02-07T18:44:13Z",
+            "endDate":"2099-12-31T00:00:00Z"
+         }
+      ],
+      "postalAddresses":[  
+         {  
+            "postalAddressId":22131169,
+            "contactMedium":[  
+               {  
+                  "contactMediumId":66308507,
+                  "contactMediumType":[  
+                     {  
+                        "contactMediumTypeId":1,
+                        "contactMediumType":"POSTAL_ADDRESS",
+                        "displayName":"Postal Address",
+                        "description":"The postal address contact medium type."
+                     }
+                  ],
+                  "contactId":39826977,
+                  "state":"ACTIVE",
+                  "startDate":"2017-02-07T18:44:13Z",
+                  "endDate":"2099-12-31T00:00:00Z"
+               }
+            ],
+            "addressLine1":"8331 North valley",
+            "addressLine2":null,
+            "municipality":"Englewood",
+            "region":"AL",
+            "postalCode":"35578-3048",
+            "countryCode":"US",
+            "state":"ACTIVE",
+            "startDate":"2017-02-07T18:44:13Z",
+            "endDate":"2099-12-31T00:00:00Z"
+         }
+      ],
+      "socialMediaAddresses":null,
+      "state":"ACTIVE",
+      "startDate":"2017-02-07T18:44:13Z",
+      "endDate":"2099-12-31T00:00:00Z"
+   }
+]
+

@@ -1,0 +1,191 @@
+<!DOCTYPE form-validation PUBLIC
+  "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+  "http://commons.apache.org/dtds/validator_1_3_0.dtd">
+<form-validation>
+	<global>
+		<validator name="dateBefore"
+			classname="com.viasat.wildblue.common.validator.DateRangeValidator"
+			method="validateDateBefore"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidcombination" />
+		<validator name="dateTodayOrEarlier"
+			classname="com.viasat.wildblue.common.validator.DateValidator"
+			method="validateCurrentOrPastDate"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.outofrange" />
+
+		<validator name="dateTodayOrLater"
+			classname="com.viasat.wildblue.common.validator.DateValidator"
+			method="validateCurrentOrFutureDate"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.outofrange" />
+
+		<validator name="dateTodaysMonthOrLater"
+			classname="com.viasat.wildblue.common.validator.DateValidator"
+			method="validateCurrentOrFutureMonth"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.outofrange" />
+		<validator name="email"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateEmail"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidformat" />
+		<validator name="enum"
+			classname="com.viasat.wildblue.common.validator.EnumValidator"
+			method="validateEnumValueExists"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.ValidatorAction,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.notvalid" />
+		<validator name="enumCaseInsensitive"
+			classname="com.viasat.wildblue.common.validator.EnumValidator"
+			method="validateEnumValueExistsIgnoreCase"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.ValidatorAction,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.notvalid" />
+		<validator name="isDateTime"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="isDateTime"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidformat" />
+		<validator name="inRangeDouble"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="isInRangeDouble"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.outofrange" />
+		<validator name="isInteger"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="isInteger"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidformat" />
+		<validator name="isInRange"
+			classname="com.viasat.wildblue.common.validator.RangeValidator"
+			method="isInRange"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.outofrange" />
+		<validator name="isLong"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="isLong"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidformat" />
+		<validator name="isPositive"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="isPositive"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.notvalid" />
+		<validator name="listMaxSize"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateListMaxSize"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.listsizeexceeded" />
+		<validator name="macAddress"
+			classname="com.viasat.wildblue.common.validator.MacAddressFormatValidator"
+			method="validateMacAddress"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidformat" />
+		<validator name="maxLength"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateMaxLength"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.maxlengthexceeded" />
+		<validator name="minLength"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateMinLength"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.minlengthinsufficient" />
+		<validator name="mutuallyExclusive"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateMutuallyExclusive"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidcombination" />
+		<validator name="notEmptyIfPresent"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateNotEmptyIfPresent"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator"
+			msg="validationerror.invalidformat" />
+		<validator name="optionalComplexType"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateOptional"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator"
+			msg="validationerror.required" />
+		<validator name="phone"
+			classname="com.viasat.wildblue.common.validator.PhoneValidator"
+			method="validatePhone"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidformat" />
+		<validator name="region"
+			classname="com.viasat.wildblue.common.validator.RegionValidator"
+			method="validateRegion"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidformat" />
+		<validator name="required"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateRequired"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator"
+			msg="validationerror.required" />
+		<validator name="requiredConditional"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateRequiredConditional"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator"
+			msg="validationerror.invalidcombination" />
+		<validator name="requiredOneOfMany"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateRequiredOneOfMany"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator"
+			msg="validationerror.requiredoneofmany" />
+		<validator name="requiredUnless"
+			classname="com.viasat.wildblue.common.validator.CommonValidator"
+			method="validateRequiredUnless"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field,
+                                 org.apache.commons.validator.Validator"
+			msg="validationerror.required" />
+		<validator name="zipCode"
+			classname="com.viasat.wildblue.common.validator.ZipCodeValidator"
+			method="validateZipcode"
+			methodParams="java.lang.Object,
+                                 org.apache.commons.validator.Field"
+			msg="validationerror.invalidformat" />
+	</global>
+	<formset>
+		<form name="Header">
+			<field property="wildBlueHeader" depends="required" />
+		</form>
+		<form name="WildBlueHeader">
+			<field property="invokedBy" depends="required" />
+		</form>
+		<form name="InvokedBy">
+			<field property="username" depends="required" />
+			<field property="application" depends="required" />
+		</form>
+	</formset>
+</form-validation>

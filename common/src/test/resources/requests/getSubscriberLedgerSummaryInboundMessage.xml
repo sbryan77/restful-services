@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<env:Header>
+		<Security
+			xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+			xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+			<wsu:Timestamp>
+				<wsu:Created>2016-03-15T16:19:38Z</wsu:Created>
+				<wsu:Expires>2016-03-15T16:29:38Z</wsu:Expires>
+			</wsu:Timestamp>
+			<UsernameToken>
+				<Username>atlasapiuser</Username>
+				<Password>blahblahblah</Password>
+				<Nonce>MzMyNDgxMjM5MTc0NTgzODkxNw==</Nonce>
+				<wsu:Created>2016-03-15T16:24:38Z</wsu:Created>
+			</UsernameToken>
+		</Security>
+		<wildBlueHeader
+			xmlns="http://www.viasat.com/XMLSchema/PublicWebService/v2 PWSHeader">
+			<invokedBy>
+				<username>?</username>
+				<application>?</application>
+			</invokedBy>
+		</wildBlueHeader>
+	</env:Header>
+	<env:Body>
+		<getSubscriberLedgerSummary
+			xmlns="http://www.viasat.com/XMLSchema/PublicWebService/v3/FinanceService">
+			<externalSystemName>WB_DIRECT</externalSystemName>
+			<externalAccountReference>2092559</externalAccountReference>
+		</getSubscriberLedgerSummary>
+	</env:Body>
+</env:Envelope>

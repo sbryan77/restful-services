@@ -1,0 +1,155 @@
+<!DOCTYPE form-validation PUBLIC
+  "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+  "http://commons.apache.org/dtds/validator_1_3_0.dtd">
+<form-validation>
+	<formset>
+		<form name="Address">
+			<field property="addressLine" depends="listMaxSize">
+				<arg position="1" key="${var:maxListSize}" resource="false"
+					name="listMaxSize" />
+				<var>
+					<var-name>maxListSize</var-name>
+					<var-value>1</var-value>
+				</var>
+			</field>
+			<field property="municipality" depends="maxLength">
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>102</var-value>
+				</var>
+			</field>
+			<field property="region" depends="maxLength">
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>102</var-value>
+				</var>
+			</field>
+			<field property="postalCode" depends="zipCode, maxLength, required">
+				<arg key="${var:maxLength}" resource="false" />
+				<var>
+					<var-name>maxLength</var-name>
+					<var-value>102</var-value>
+				</var>
+			</field>
+			<field property="countryCode" depends="required, minLength">
+
+
+				<arg key="${var:minLength}" resource="false" />
+				<var>
+					<var-name>minLength</var-name>
+					<var-value>2</var-value>
+				</var>
+			</field>
+		</form>
+		<form name="integerForm">
+			<field property="theProperty" depends="isInteger" />
+
+
+		</form>
+
+		<form name="longForm">
+			<field property="theProperty" depends="isLong" />
+
+
+		</form>
+		<form name="GeoPosition">
+			<field property="latitude" depends="required, inRangeDouble">
+
+				<arg key="${var:minValue}" resource="false" />
+				<var>
+					<var-name>minValue</var-name>
+					<var-value>-90.0000</var-value>
+				</var>
+				<arg key="${var:maxValue}" resource="false" />
+				<var>
+					<var-name>maxValue</var-name>
+					<var-value>90.0000</var-value>
+				</var>
+			</field>
+			<field property="longitude" depends="required, inRangeDouble">
+
+				<arg key="${var:minValue}" resource="false" />
+				<var>
+					<var-name>minValue</var-name>
+					<var-value>-180.0000</var-value>
+				</var>
+				<arg key="${var:maxValue}" resource="false" />
+				<var>
+					<var-name>maxValue</var-name>
+					<var-value>180.0000</var-value>
+				</var>
+			</field>
+		</form>
+
+		<form name="Contact">
+			<field property="person" depends="optionalComplexType" />
+
+			<field property="contactInfo" depends="required" />
+
+		</form>
+
+		<form name="ContactInfo">
+			<field property="emailAddress" depends="required, email" />
+
+			<field property="primaryPhone" depends="required" />
+
+			<field property="contactType" depends="required" />
+
+		</form>
+
+
+
+		<form name="Person">
+			<field property="firstName" depends="required" />
+
+			<field property="lastName" depends="required" />
+
+		</form>
+		<form name="testRequiredConditional">
+			<field property="someField" />
+			<field property="someOtherField" depends="requiredConditional">
+
+				<arg key="${var:conditionField}" resource="false" />
+				<var>
+					<var-name>conditionField</var-name>
+					<var-value>someField</var-value>
+				</var>
+
+			</field>
+		</form>
+		<form name="testRequiredUnless">
+			<field property="someField" />
+			<field property="someOtherField" depends="requiredUnless">
+
+				<arg key="${var:conditionField}" resource="false" />
+				<arg key="${var:conditionFieldValue}" resource="false" />
+				<var>
+					<var-name>conditionField</var-name>
+					<var-value>someField</var-value>
+				</var>
+				<var>
+					<var-name>conditionFieldValue</var-name>
+					<var-value>BlahGinger</var-value>
+				</var>
+			</field>
+		</form>
+		
+		<form name="testDates">
+			<field property="date1" depends="dateTodayOrEarlier"/>
+			<field property="date2" depends="dateTodayOrLater"/>
+			<field property="date3" depends="dateTodaysMonthOrLater"/>
+		</form>
+		
+		<form name="nestedTest1">
+			<field property = "nestedTest2" depends="optionalComplexType"/>
+		</form>
+		<form name="nestedTest2">
+			<field property = "someField" depends ="required"/>
+			
+		</form>
+				
+	</formset>
+
+</form-validation>

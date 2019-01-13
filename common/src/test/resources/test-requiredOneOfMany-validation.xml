@@ -1,0 +1,73 @@
+<!DOCTYPE form-validation PUBLIC
+  "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.3.0//EN"
+  "http://commons.apache.org/dtds/validator_1_3_0.dtd">
+
+<form-validation>
+    <formset>
+        <form name="testRequiredOneOfMany1">
+            <field property="fieldA" depends="requiredOneOfMany">
+                <arg key="${var:fieldSet}" resource="false"/>
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>fieldA, fieldB</var-value>
+                </var>
+            </field>
+            <field property="fieldB" depends="requiredOneOfMany">
+                <arg key="${var:fieldSet}" resource="false"/>
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>fieldA,fieldB</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="testRequiredOneOfMany2">
+            <field property="fieldA" depends="requiredOneOfMany">
+                <arg key="${var:fieldSet}" resource="false"/>
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>fieldA, fieldB, fieldC, fieldD</var-value>
+                </var>
+            </field>
+            <field property="fieldB" depends="requiredOneOfMany">
+                <arg key="${var:fieldSet}" resource="false"/>
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>fieldA, fieldB, fieldC, fieldD</var-value>
+                </var>
+            </field>
+            <field property="fieldC" depends="requiredOneOfMany">
+                <arg key="${var:fieldSet}" resource="false"/>
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>fieldA, fieldB, fieldC, fieldD</var-value>
+                </var>
+            </field>
+            <field property="fieldD" depends="requiredOneOfMany">
+                <arg key="${var:fieldSet}" resource="false"/>
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>fieldA, fieldB, fieldC, fieldD</var-value>
+                </var>
+            </field>
+        </form>
+        
+        <form name="PaymentMethod">
+            <field property="eft" depends="requiredOneOfMany, mutuallyExclusive">
+                <arg key="${var:fieldSet}" resource="false" />
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>eft, creditCard</var-value>
+                </var>
+            </field>
+            <field property="creditCard" depends="requiredOneOfMany, mutuallyExclusive">
+                <arg key="${var:fieldSet}" resource="false" />
+                <var>
+                    <var-name>fieldSet</var-name>
+                    <var-value>eft, creditCard</var-value>
+                </var>
+            </field>
+        </form>
+    </formset>
+
+</form-validation>
