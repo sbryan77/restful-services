@@ -1,0 +1,5 @@
+com\viasat\wildblue\internalwebservice\configuration\CxfConfig.class
+com\viasat\wildblue\internalwebservice\configuration\AppConfig.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationDAOImpl.class
+com\viasat\wildblue\internalwebservice\configuration\servlet\ConfigServlet.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationDAOImpl$1.class

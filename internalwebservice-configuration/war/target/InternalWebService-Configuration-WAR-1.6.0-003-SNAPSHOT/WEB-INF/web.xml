@@ -1,0 +1,58 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Configuration Service</display-name>
+	
+   <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/applicationContext.xml</param-value>
+    </context-param>
+
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+
+	<!-- Servlets -->
+	<!-- cxfServlet -->
+	<servlet>
+		<servlet-name>CXFServlet</servlet-name>
+		<servlet-class>
+			org.apache.cxf.transport.servlet.CXFServlet
+		</servlet-class>
+	</servlet>
+	<!-- Application Status Servlet -->
+	<servlet>    
+		<servlet-name>ApplicationStatusServlet</servlet-name>    
+		<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+	</servlet> 
+	
+	<servlet>
+		<servlet-name>ConfigServlet</servlet-name>
+		<servlet-class>com.viasat.wildblue.internalwebservice.configuration.servlet.ConfigServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ConfigServlet</servlet-name>
+		<url-pattern>/request/*</url-pattern>
+	</servlet-mapping>
+	<!-- cxfServlet mapping-->
+	<servlet-mapping>
+		<servlet-name>CXFServlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
+	<!-- Application Status Servlet Mapping-->
+	<servlet-mapping>    
+		<servlet-name>ApplicationStatusServlet</servlet-name>    
+		<url-pattern>/applicationstatus/*</url-pattern>
+	</servlet-mapping> 
+	
+	
+	<!-- Welcome files. -->
+	<welcome-file-list>
+		<welcome-file>applicationstatus</welcome-file>
+	</welcome-file-list>
+</web-app>

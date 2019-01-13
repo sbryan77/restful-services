@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Project CommonWSHeaderXSD.jar - Types definition XSD, version: 3.1.0-002-SNAPSHOT, build timestamp: 2018-11-17T01:45:46Z -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns="http://www.wildblue.viasat.com/XMLSchema/v3.0/Header" 
+           targetNamespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/Header" 
+           elementFormDefault="qualified" 
+           attributeFormDefault="unqualified">
+
+	<xs:element name="wildBlueHeader" type="wildBlueHeader"/>
+	<xs:complexType name="wildBlueHeader">
+		<xs:sequence>
+			<xs:element name="invokedBy" type="invokedBy"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="invokedBy">
+		<xs:sequence>
+			<xs:element name="username" type="xs:string"/>
+			<xs:element name="application" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>

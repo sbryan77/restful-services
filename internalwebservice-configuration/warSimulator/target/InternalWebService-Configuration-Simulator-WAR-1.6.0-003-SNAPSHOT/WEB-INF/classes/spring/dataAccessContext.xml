@@ -1,0 +1,14 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- 
+		This file contains data source beans for integrated environment.
+		PLEASE DO NOT ADD ANY TEST BEANS.
+	 -->
+
+    <bean id="configurationDao"
+          class="com.viasat.wildblue.internalwebservice.configuration.ConfigurationDAOSimulatorImpl"/>
+
+</beans>

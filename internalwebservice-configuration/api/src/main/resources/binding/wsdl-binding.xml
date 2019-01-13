@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxws:bindings wsdlLocation="../wsdl/ConfigurationService.wsdl" version="1.1"
+          xmlns:jaxws="http://java.sun.com/xml/ns/jaxws"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+          xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        node="wsdl:definitions/wsdl:portType/wsdl:operation/wsdl:fault[@name='WebServiceException']">
+    <jaxws:class name="com.viasat.wildblue.common.exception.WebServiceException"/>
+    <jaxws:package name='com.viasat.wildblue.internalwebservice.configuration'/>
+</jaxws:bindings>

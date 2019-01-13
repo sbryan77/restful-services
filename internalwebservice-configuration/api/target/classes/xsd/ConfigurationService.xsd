@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns="http://www.wildblue.viasat.com/XMLSchema/v3.0/webservice/ConfigurationWebService"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ex="http://www.wildblue.viasat.com/XMLSchema/v3.0/Exception"
+	targetNamespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/webservice/ConfigurationWebService"
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:import namespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/Exception"
+		schemaLocation="../xsd/Exception.xsd" />
+
+	<xs:complexType name="ConfigurationItem">
+		<xs:sequence>
+			<xs:element name="key" type="xs:string" />
+			<xs:element name="value" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ConfigurationItemDouble">
+		<xs:sequence>
+			<xs:element name="key" type="xs:string" />
+			<xs:element name="value" type="xs:double" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getConfigurationItemDoubleResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="value" type="xs:double" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="ConfigurationItemInt">
+		<xs:sequence>
+			<xs:element name="key" type="xs:string" />
+			<xs:element name="value" type="xs:int" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getConfigurationItemIntResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="value" type="xs:int" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="ConfigurationItems">
+		<xs:sequence>
+			<xs:element name="configuration" type="ConfigurationItem"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getCompleteConfiguration" type="getCompleteConfiguration" />
+	<xs:complexType name="getCompleteConfiguration">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getCompleteConfigurationResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="configuration" type="ConfigurationItem"
+					maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="getConfigurationItemDouble" type="getConfigurationItem" />
+	<xs:element name="getConfigurationItemInt" type="getConfigurationItem" />
+	<xs:element name="getConfigurationItem" type="getConfigurationItem" />
+
+	<xs:element name="getConfigurationItemList" type="getConfigurationItem" />
+	<xs:complexType name="getConfigurationItem">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+			<xs:element name="key" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="getConfigurationItemDefault" type="getConfigurationItemDefault" />
+	<xs:complexType name="getConfigurationItemDefault">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+			<xs:element name="key" type="xs:string" />
+			<xs:element name="defaultString" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="getConfigurationItemDoubleDefault" type="getConfigurationItemDoubleDefault" />
+	<xs:complexType name="getConfigurationItemDoubleDefault">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+			<xs:element name="key" type="xs:string" />
+			<xs:element name="defaultDouble" type="xs:double"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="getConfigurationItemIntDefault" type="getConfigurationItemIntDefault" />
+	<xs:complexType name="getConfigurationItemIntDefault">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+			<xs:element name="key" type="xs:string" />
+			<xs:element name="defaultInt" type="xs:int" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="getConfigurationItemResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="value" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="getConfigurationItems" type="getConfigurationItems" />
+	<xs:complexType name="getConfigurationItems">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+			<xs:element name="key" type="xs:string" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="getConfigurationItemsResponse" type="configurationList" />
+	<xs:element name="getConfigurationItemListResponse" type="configurationList" />
+	<xs:complexType name="configurationList">
+		<xs:sequence>
+			<xs:element name="configuration" type="ConfigurationItem"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="replaceConfigurationDocument" type="replaceConfigurationDocument" />
+	<xs:complexType name="replaceConfigurationDocument">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+			<xs:element name="xml" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="replaceConfigurationDocumentResponse">
+		<xs:complexType />
+	</xs:element>
+	<xs:element name="deleteConfigurationDocument" type="deleteConfigurationDocument" />
+	<xs:complexType name="deleteConfigurationDocument">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="deleteConfigurationDocumentResponse">
+		<xs:complexType />
+	</xs:element>
+	<xs:element name="getDocumentNames" type="getDocumentNames" />
+	<xs:complexType name="getDocumentNames">
+		<xs:sequence/>
+	</xs:complexType>
+	<xs:element name="getDocumentNamesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="documentName" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getConfigurationDocument" type="getConfigurationDocument" />
+	<xs:complexType name="getConfigurationDocument">
+		<xs:sequence>
+			<xs:element name="documentName" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getConfigurationDocumentResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="configurationDocument" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <!-- ********** Application Context for the service WAR module ********** -->
+
+    <!-- Enable auto scanning. Allows bean level annotations (e.g. scope) to be leveraged  -->
+    <context:component-scan base-package="com.viasat.wildblue"/>
+
+    <!-- import resource="classpath:sql-error-codes.xml" / -->
+
+    <!-- Imports the CXF bean definitions -->
+    <import resource="classpath:/spring/cxfContext.xml"/>
+
+    <!-- Imports provisioning facade simulator bean definitions -->
+    <import resource="classpath:/spring/dataAccessContext.xml" />
+
+    <!-- implementation beans -->
+    <bean id="configurationService"
+          class="com.viasat.wildblue.internalwebservice.configuration.ConfigurationServiceV10Impl">
+        <property name="configServiceProcessor" ref="configServiceProcessor"/>
+    </bean>
+
+    <bean id="configServiceProcessor"
+          class="com.viasat.wildblue.internalwebservice.configuration.ConfigurationServiceV10Processor">
+        <property name="configDao" ref="configurationDao"/>
+        <property name="configDocReader" ref="configurationDocReader"/>
+    </bean>                 
+
+    <bean id="configurationDocReader"
+          class="com.viasat.wildblue.internalwebservice.configuration.ConfigurationDocumentReaderImpl"/>
+
+    <!-- Interceptors -->
+    <!-- These are Spring AOP aspects, to provide cross cutting processing-->
+    <!-- which will be executed for all methods in the Service's API.     -->
+    <!--
+    <bean id="ServiceMethodInterceptor"
+          class="com.viasat.wildblue.facade.provisioning.ProvisioningServiceMethodInterceptor"/>
+    -->
+
+    <!-- Logging interceptor cross cutting all classes in the facade      -->
+    <!--
+    <bean id="loggingInterceptor"
+          class="com.viasat.wildblue.common.intercept.GenericLoggingInterceptor"/>
+    -->
+
+    <!-- Proxy for the Service implementation class.                      -->
+    <!-- This is Spring AOP configuration for the method interceptors.    -->
+    <!--
+    <bean id="configurationServiceProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="configurationService"/>
+        <property name="interceptorNames">
+            <list>
+                <value>ServiceMethodInterceptor</value>
+            </list>
+        </property>
+    </bean>
+    -->
+
+    <!-- Use auto proxy to apply logging for all Test suites -->
+    <!--
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>Configuration*</value>
+                <value>*Adapter</value>
+                <value>*Service</value>
+                <value>*DAO</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>loggingInterceptor</value>
+            </list>
+        </property>
+    </bean>
+    -->
+
+</beans>

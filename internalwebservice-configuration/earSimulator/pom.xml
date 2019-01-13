@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>InternalWebService-Configuration-POM</artifactId>
+        <groupId>com.viasat.wildblue.internalwebservice.configuration</groupId>
+        <version>1.2.0-002-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.viasat.wildblue.internalwebservice.configuration</groupId>
+    <artifactId>InternalWebService-Configuration-Simulator</artifactId>
+    <version>1.2.0-002-SNAPSHOT</version>
+    <packaging>ear</packaging>
+    <name>InternalWebService-Configuration-Simulator</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.viasat.wildblue.internalwebservice.configuration</groupId>
+            <artifactId>InternalWebService-Configuration-Simulator-WAR</artifactId>
+            <version>1.2.0-002-SNAPSHOT</version>
+            <type>war</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-ws-metadata_2.0_spec</artifactId>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <weblogic.version>10.3</weblogic.version>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>2.4.2</version>
+                <configuration>
+                    <modules>
+                        <webModule>
+                            <groupId>com.viasat.wildblue.internalwebservice.configuration</groupId>
+                            <artifactId>InternalWebService-Configuration-Simulator-WAR</artifactId>
+                            <contextRoot>/ConfigurationServiceSimulator</contextRoot>
+                        </webModule>
+                    </modules>
+                    <archive>
+                        <manifestEntries>
+                            <WebLogic-Application-Version>${project.version}</WebLogic-Application-Version>
+                        </manifestEntries>
+                    </archive>
+                    <earSourceDirectory>src/main/application</earSourceDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

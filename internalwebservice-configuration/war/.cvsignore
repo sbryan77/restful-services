@@ -1,0 +1,6 @@
+target
+.settings
+.project
+.classpath
+servers
+InternalWebService-Configuration-WAR.iml

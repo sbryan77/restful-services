@@ -1,0 +1,4 @@
+com\viasat\wildblue\internalwebservice\configuration\servlet\ConfigServletProcessorTestInt.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationServiceV10ImplTestInt.class
+com\viasat\wildblue\internalwebservice\configuration\servlet\ConfigServletTestInt.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationDAOImplTestInt.class

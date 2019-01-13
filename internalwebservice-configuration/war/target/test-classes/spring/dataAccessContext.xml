@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- 
+		This file contains data source beans for integrated environment.
+		PLEASE DO NOT ADD ANY TEST BEANS.
+	 -->
+
+    <bean id="configurationDao" class="com.viasat.wildblue.internalwebservice.configuration.ConfigurationDAOImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+	<!--  data source bean for dev environment for Configuration Service  -->
+    <bean id="dataSource" destroy-method="close" class="oracle.jdbc.pool.OracleDataSource">
+        <property name="driverType" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="URL" value="jdbc:oracle:thin:@rac01-node01-vip.dev.wdc1.wildblue.net:1633:wbad1"/>
+        <property name="user" value="CONFIG_USER"/>
+        <property name="password" value="CONFIG_USER0214"/>
+    </bean>
+
+</beans>

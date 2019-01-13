@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>com.viasat.wildblue.internalwebservice.configuration</groupId>
+		<artifactId>InternalWebService-Configuration-POM</artifactId>
+		<version>1.6.0-003-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>InternalWebService-Configuration-WAR</artifactId>
+    <packaging>war</packaging>
+	<name>InternalWebService-Configuration-WAR</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<context.root>ConfigurationService</context.root>
+		<context.version />
+		<context.separator.dist />
+		<context.separator.deploy /> 
+    </properties>
+    
+	<dependencies>
+		<dependency>
+			<groupId>com.viasat.wildblue.internalwebservice.configuration</groupId>
+			<artifactId>InternalWebService-Configuration-CORE</artifactId>
+            <version>${project.version}</version>
+		</dependency>
+		<dependency>  
+			<groupId>com.viasat.common.applicationstatus</groupId>  
+			<artifactId>ApplicationStatusServlet</artifactId>
+		</dependency> 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+		</dependency>
+		<!--	<dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>xdb</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.oracle</groupId>
+                <artifactId>ojdbc6.jar</artifactId>
+            </dependency> -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-management</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>    
+		<!-- default maven war plugin (see BuildCommon pluginManagement) -->    
+			<plugin>        
+				<groupId>org.apache.maven.plugins</groupId>        
+				<artifactId>maven-war-plugin</artifactId>    
+			</plugin>    
+			<!-- this will unpack the assembly directory from Common and place it in the war/src directory (see BuildCommon pluginManagement) -->    
+			<plugin>        
+				<groupId>org.apache.maven.plugins</groupId>        
+				<artifactId>maven-dependency-plugin</artifactId>        
+				<executions>            
+					<execution>                
+						<id>unpack-tomcat-zip-assembly</id>                
+						<!-- we must specify the phase because it is defaulted to "none" so it won't interfere with api XSD unpacking -->                
+						<phase>initialize</phase>            
+					</execution>        
+				</executions>    
+			</plugin>    
+			<!-- parse the version number so we can zero-pad with groovy (see BuildCommon pluginManagement) -->    
+			<plugin>        
+				<groupId>org.codehaus.mojo</groupId>       
+				 <artifactId>build-helper-maven-plugin</artifactId>    
+			</plugin>    
+			<!--  groovy plugin used to derive zero-padded version for the Tomcat context.xml (see BuildCommon pluginManagement) -->   
+			 <plugin>        
+			 	<groupId>org.codehaus.mojo</groupId>        
+			 	<artifactId>groovy-maven-plugin</artifactId>    
+			 </plugin>    
+			 <!-- maven-assembly used again to assemble a zip file (see BuildCommon pluginManagement) -->    
+			 <plugin>        
+			 	<groupId>org.apache.maven.plugins</groupId>        
+			 	<artifactId>maven-assembly-plugin</artifactId>    
+			 </plugin>    
+			 <!-- default tomcat deployment plugin (see BuildCommon pluginManagement) -->    
+			 <plugin>        
+			 	<groupId>org.codehaus.mojo</groupId>        
+			 	<artifactId>tomcat-maven-plugin</artifactId>    
+			 </plugin>
+		</plugins> 
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+
+
+	<profiles>
+		<profile>
+			<id>TestInt</id>
+			<activation>
+				<activeByDefault />
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<systemProperties>
+							</systemProperties>
+						</configuration>
+						<executions>
+							<execution>
+								<id>integration-tests</id>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+								<configuration>
+									<!-- Never skip running the tests when the integration-test phase 
+										is invoked -->
+									<skip>false</skip>
+									<includes>
+										<!-- Include integration tests within integration-test phase. -->
+										<include>**/*Int.*</include>
+									</includes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<testResources>
+					<testResource>
+						<directory>src/test/resources</directory>
+						<includes>
+							<include>spring/dataAccessContext.xml</include>
+						</includes>
+					</testResource>
+				</testResources>
+			</build>
+		</profile>
+	</profiles>
+</project>
+

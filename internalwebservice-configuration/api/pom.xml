@@ -1,0 +1,246 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>com.viasat.wildblue.internalwebservice.configuration</groupId>
+		<artifactId>InternalWebService-Configuration-POM</artifactId>
+		<version>1.6.0-003-SNAPSHOT</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>InternalWebService-Configuration-API</artifactId>
+	<packaging>jar</packaging>
+
+	<name>InternalWebService-Configuration-API</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>CommonLocationXSD</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>CommonDataXSD</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>CommonWSExceptionXSD</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>CommonWSHeaderXSD</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>Common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>unpack-dependencies</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.viasat.wildblue.common</groupId>
+									<artifactId>Common</artifactId>
+									<overWrite>false</overWrite>
+									<outputDirectory>${project.build.directory}/dependencies/common-xsd</outputDirectory>
+									<includes>**/*.xsd,**/*.xjb</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.viasat.wildblue.common</groupId>
+									<artifactId>CommonDataXSD</artifactId>
+									<overWrite>false</overWrite>
+									<outputDirectory>${project.build.directory}/dependencies/common-xsd</outputDirectory>
+									<includes>**/*.xsd,**/*.xjb</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.viasat.wildblue.common</groupId>
+									<artifactId>CommonLocationXSD</artifactId>
+									<overWrite>false</overWrite>
+									<outputDirectory>${project.build.directory}/dependencies/common-xsd</outputDirectory>
+									<includes>**/*.xsd,**/*.xjb</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.viasat.wildblue.common</groupId>
+									<artifactId>CommonWSHeaderXSD</artifactId>
+									<overWrite>false</overWrite>
+									<outputDirectory>${project.build.directory}/dependencies/common-xsd</outputDirectory>
+									<includes>**/*.xsd,**/*.xjb</includes>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.viasat.wildblue.common</groupId>
+									<artifactId>CommonWSExceptionXSD</artifactId>
+									<overWrite>false</overWrite>
+									<outputDirectory>${project.build.directory}/dependencies/common-xsd</outputDirectory>
+									<includes>**/*.xsd,**/*.xjb</includes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-sources</id>
+						<configuration>
+							<wsdlOptions>
+								<wsdlOption>
+									<wsdl>${basedir}/src/main/resources/wsdl/ConfigurationService.wsdl
+                                    </wsdl>
+									<bindingFiles>
+										<bindingFile>${basedir}/src/main/resources/binding/wsdl-binding.xml
+                                        </bindingFile>
+										<bindingFile>${basedir}/src/main/resources/binding/xsd-binding.xml
+                                        </bindingFile>
+									</bindingFiles>
+									<extraargs>
+										<extraarg>-exsh</extraarg>
+										<extraarg>true</extraarg>
+										<extraarg>-nexclude</extraarg>
+										<extraarg>http://www.wildblue.viasat.com/XMLSchema/v3.0/CommonData=com.viasat.wildblue.common.commondata
+                                        </extraarg>
+										<extraarg>-nexclude</extraarg>
+										<extraarg>http://www.wildblue.viasat.com/XMLSchema/v3.0/Exception=com.viasat.wildblue.common.exception
+                                        </extraarg>
+										<extraarg>-nexclude</extraarg>
+										<extraarg>http://www.wildblue.viasat.com/XMLSchema/v3.0/Header=com.viasat.wildblue.common.header
+                                        </extraarg>
+										<extraarg>-nexclude</extraarg>
+										<extraarg>http://www.wildblue.viasat.com/XMLSchema/v3.0/Location=com.viasat.wildblue.common.location
+                                        </extraarg>
+									</extraargs>
+								</wsdlOption>
+							</wsdlOptions>
+						</configuration>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>maven-replacer-plugin</artifactId>
+				<version>1.3.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant</artifactId>
+						<version>1.7.0</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>wsdl-replace</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>target/classes/**/*.wsdl</include>
+							</includes>
+
+							<excludes>
+								<exclude>**/*.class</exclude>
+							</excludes>
+							<replacements>
+								<replacement>
+									<token>../../../../target/dependencies/common-xsd/</token>
+									<value>../</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</execution>
+					<execution>
+						<id>xsd-replace</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>target/classes/**/*.xsd</include>
+							</includes>
+
+							<excludes>
+								<exclude>**/*.class</exclude>
+							</excludes>
+							<replacements>
+								<replacement>
+									<token>../../../../target/dependencies/common-xsd/</token>
+									<value>../</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</execution>
+
+				</executions>
+
+			</plugin>
+			<!-- This little bit of magic is a workaround to delete the generated 
+				com.viasat.wildblue.common.exception.WebServiceException class in the Billing 
+				Facade project. Note - this has to be run after generate-sources, so I put 
+				it into the process-sources phase. -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>cleanupWebserviceException</id>
+						<phase>process-sources</phase>
+						<configuration>
+							<target>
+								<echo message="Java version: ${java.version}" /> 
+								<echo message="CXF version: ${cxf.version}" /> 
+								<echo message="Spring version: ${spring.version}" /> 
+										
+								<delete dir="${basedir}/target/generated-sources/cxf/com/viasat/wildblue/common" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+
+	</build>
+</project>

@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 
+		This file contains data source beans for integrated environment.
+		PLEASE DO NOT ADD ANY TEST BEANS.
+	 -->
+
+    <bean id="configurationDao" class="com.viasat.wildblue.internalwebservice.configuration.ConfigurationDAOImpl">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="documentReader" ref="configurationDocReader" />        
+    </bean>
+	<bean id="configurationDocReader"
+		class="com.viasat.wildblue.internalwebservice.configuration.ConfigurationDocumentReaderImpl" />
+	<!--  data source bean for integrated environment for Provisioning Facade  -->
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/ConfigDataSource</value>
+		</property>
+	</bean>
+    <tx:annotation-driven />
+</beans>

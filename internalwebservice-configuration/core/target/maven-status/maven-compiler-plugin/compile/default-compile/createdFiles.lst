@@ -1,0 +1,13 @@
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationDocumentReader.class
+com\viasat\wildblue\internalwebservice\configuration\servlet\ConfigRequest.class
+com\viasat\wildblue\internalwebservice\configuration\servlet\XMLUtilities.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationServiceV10Processor.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigConstants.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationDocumentReaderImpl.class
+com\viasat\wildblue\internalwebservice\configuration\servlet\ConfigServletProcessor.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationFaultException.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationDAO.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationServiceV10Impl.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationMonitor.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationMonitorImpl.class
+com\viasat\wildblue\internalwebservice\configuration\RequestTypeEnum.class

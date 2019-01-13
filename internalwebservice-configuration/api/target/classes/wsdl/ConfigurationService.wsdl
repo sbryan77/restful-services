@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 3 sp1 (http://www.altova.com) by ybhyri 
+	(WildBlue Greenwood Village) -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tns="http://www.wildblue.viasat.com/WSDL/v1.0/ConfigurationWebService"
+	xmlns:cs="http://www.wildblue.viasat.com/XMLSchema/v3.0/webservice/ConfigurationWebService"
+	xmlns:ex="http://www.wildblue.viasat.com/XMLSchema/v3.0/Exception"
+	xmlns:ns="http://www.wildblue.viasat.com/XMLSchema/v3.0/CommonData"
+	xmlns:ns1="http://www.wildblue.viasat.com/XMLSchema/v3.0/Location"
+	xmlns:hdr="http://www.wildblue.viasat.com/XMLSchema/v3.0/Header"
+	targetNamespace="http://www.wildblue.viasat.com/WSDL/v1.0/ConfigurationWebService">
+	<wsdl:types>
+		<xs:schema targetNamespace="http://new.webservice.namespace"
+			elementFormDefault="qualified">
+			<xs:import
+				namespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/webservice/ConfigurationWebService"
+				schemaLocation="../xsd/ConfigurationService.xsd" />
+			<xs:import namespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/Exception"
+				schemaLocation="../xsd/Exception.xsd" />
+			<xs:import namespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/Header"
+				schemaLocation="../xsd/Header.xsd" />
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getCompleteConfiguration">
+		<wsdl:part name="parameter" element="cs:getCompleteConfiguration" />
+	</wsdl:message>
+	<wsdl:message name="getCompleteConfigurationResponse">
+		<wsdl:part name="parameter" element="cs:getCompleteConfigurationResponse" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItem">
+		<wsdl:part name="parameter" element="cs:getConfigurationItem" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemResponse">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemResponse" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemDouble">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemDouble" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemDoubleResponse">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemDoubleResponse" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemInt">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemInt" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemIntResponse">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemIntResponse" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItems">
+		<wsdl:part name="parameter" element="cs:getConfigurationItems" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemList">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemList" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemsResponse">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemsResponse" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemListResponse">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemListResponse" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemDefault">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemDefault" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemDoubleDefault">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemDoubleDefault" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationItemIntDefault">
+		<wsdl:part name="parameter" element="cs:getConfigurationItemIntDefault" />
+	</wsdl:message>
+	<wsdl:message name="deleteConfigurationDocument">
+		<wsdl:part name="parameter" element="cs:deleteConfigurationDocument" />
+	</wsdl:message>
+	<wsdl:message name="deleteConfigurationDocumentResponse">
+		<wsdl:part name="parameter" element="cs:deleteConfigurationDocumentResponse" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationDocument">
+		<wsdl:part name="parameter" element="cs:getConfigurationDocument" />
+	</wsdl:message>
+	<wsdl:message name="getConfigurationDocumentResponse">
+		<wsdl:part name="parameter" element="cs:getConfigurationDocumentResponse" />
+	</wsdl:message>
+	<wsdl:message name="replaceConfigurationDocument">
+		<wsdl:part name="parameter" element="cs:replaceConfigurationDocument" />
+	</wsdl:message>
+	<wsdl:message name="replaceConfigurationDocumentResponse">
+		<wsdl:part name="parameter" element="cs:replaceConfigurationDocumentResponse" />
+	</wsdl:message>
+	<wsdl:message name="getDocumentNames">
+		<wsdl:part name="parameter" element="cs:getDocumentNames" />
+	</wsdl:message>
+	<wsdl:message name="getDocumentNamesResponse">
+		<wsdl:part name="parameter" element="cs:getDocumentNamesResponse" />
+	</wsdl:message>
+	<wsdl:message name="wildBlueHeader">
+		<wsdl:part name="wildBlueHeader" element="hdr:wildBlueHeader" />
+	</wsdl:message>
+
+	<wsdl:message name="WebServiceException">
+		<wsdl:part name="parameter" element="ex:ExceptionDetail" />
+	</wsdl:message>
+
+	<wsdl:portType name="ConfigurationService_v1.0">
+		<wsdl:operation name="getCompleteConfiguration">
+			<wsdl:input message="tns:getCompleteConfiguration" />
+			<wsdl:output message="tns:getCompleteConfigurationResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItem">
+			<wsdl:input message="tns:getConfigurationItem" />
+			<wsdl:output message="tns:getConfigurationItemResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemDefault">
+			<wsdl:input message="tns:getConfigurationItemDefault" />
+			<wsdl:output message="tns:getConfigurationItemResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemDouble">
+			<wsdl:input message="tns:getConfigurationItemDouble" />
+			<wsdl:output message="tns:getConfigurationItemDoubleResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemDoubleDefault">
+			<wsdl:input message="tns:getConfigurationItemDoubleDefault" />
+			<wsdl:output message="tns:getConfigurationItemDoubleResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemInt">
+			<wsdl:input message="tns:getConfigurationItemInt" />
+			<wsdl:output message="tns:getConfigurationItemIntResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemIntDefault">
+			<wsdl:input message="tns:getConfigurationItemIntDefault" />
+			<wsdl:output message="tns:getConfigurationItemIntResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItems">
+			<wsdl:input message="tns:getConfigurationItems" />
+			<wsdl:output message="tns:getConfigurationItemsResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemList">
+			<wsdl:input message="tns:getConfigurationItemList" />
+			<wsdl:output message="tns:getConfigurationItemListResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteConfigurationDocument">
+			<wsdl:input message="tns:deleteConfigurationDocument" />
+			<wsdl:output message="tns:deleteConfigurationDocumentResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationDocument">
+			<wsdl:input message="tns:getConfigurationDocument" />
+			<wsdl:output message="tns:getConfigurationDocumentResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="replaceConfigurationDocument">
+			<wsdl:input message="tns:replaceConfigurationDocument" />
+			<wsdl:output message="tns:replaceConfigurationDocumentResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getDocumentNames">
+			<wsdl:input message="tns:getDocumentNames" />
+			<wsdl:output message="tns:getDocumentNamesResponse" />
+			<wsdl:fault name="WebServiceException" message="tns:WebServiceException" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="ConfigurationServiceSoapBinding" type="tns:ConfigurationService_v1.0">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getCompleteConfiguration">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItem">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemDefault">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemDouble">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemDoubleDefault">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemInt">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemIntDefault">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItems">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationItemList">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteConfigurationDocument">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getConfigurationDocument">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="replaceConfigurationDocument">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+		<wsdl:operation name="getDocumentNames">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:header message="tns:wildBlueHeader" part="wildBlueHeader"
+					use="literal" />
+				<soap:body parts="parameter" use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="WebServiceException" />
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ConfigurationService">
+		<wsdl:port name="ConfigurationServiceEndpoint_v1.0" binding="tns:ConfigurationServiceSoapBinding">
+			<soap:address
+				location="http://glassfish-ha.sst.wildblue.net/WebServices/services/Configuration/v1.0" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

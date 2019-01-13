@@ -1,0 +1,2 @@
+<!-- tomcat context definition: the name of this file will override the WAR's default context path -->
+<Context docBase="../deployments/InternalWebService-Configuration-WAR-1.6.0-003-SNAPSHOT.war" />

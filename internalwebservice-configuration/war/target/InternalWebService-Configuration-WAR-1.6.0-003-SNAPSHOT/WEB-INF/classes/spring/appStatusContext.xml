@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- Database Health Checks -->
+	<bean id="configDataSourceCheck" class="com.viasat.common.applicationstatus.healthcheck.GenericDatabaseConnectionCheck">
+		<property name="healthCheckName" value="ConfigDataSource" /> 
+		<property name="dataSource" ref="dataSource" /> 
+	</bean>
+	
+    <!-- Application Health Checks -->
+    <bean id="applicationHealthCheck" class="com.viasat.common.applicationstatus.DefaultApplicationHealthCheckProcessor">
+        <!-- register custom health checks here -->
+        <property name="checks">
+            <list>
+                <ref bean="configDataSourceCheck" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- Version Info Processor -->
+    <bean id="applicationInfo" class="com.viasat.common.applicationstatus.DefaultApplicationInfoProcessor">
+        <property name="versionProperties">
+            <bean id="versionProperties" class="com.viasat.common.applicationstatus.VersionProperties">
+                <!-- You can override the default name for the version.properties file here. -->
+                <!-- <constructor-arg name="propertiesResourceName" value="version" /> -->
+            </bean>
+        </property>
+    </bean>
+    
+    <!-- Environment Detail Processor -->
+    <bean id="environmentDetail" class="com.viasat.common.applicationstatus.DefaultEnvironmentDetailProcessor" />
+    
+    <!-- Last Response Interceptor -->
+    <bean id="lastResponseTime" class="com.viasat.common.applicationstatus.interceptor.LastResponseTime" />
+ 
+    <!-- Register the interceptor to your jaxws:endpoint out and fault interceptors in cfxContext.xml-->
+    <!--
+        <jaxws:outInterceptors>
+            <ref bean="lastResponseTime" />
+        </jaxws:outInterceptors>
+        <jaxws:outFaultInterceptors>
+            <ref bean="lastResponseTime" />
+        </jaxws:outFaultInterceptors>
+    -->
+
+    <!-- Servlet Setup -->
+    <bean id="ApplicationStatusServlet"    class="com.viasat.common.applicationstatus.servlet.ApplicationStatusServlet">
+        <property name="appInfoProcessor" ref="applicationInfo" />
+        <property name="appHealthCheckProcessor" ref="applicationHealthCheck" />
+        <property name="envDetailProcessor" ref="environmentDetail" />
+    </bean>
+
+</beans>

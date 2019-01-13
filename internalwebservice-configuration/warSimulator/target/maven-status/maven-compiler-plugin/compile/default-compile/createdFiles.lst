@@ -1,0 +1,3 @@
+com\viasat\wildblue\internalwebservice\configuration\CxfConfigSimulator.class
+com\viasat\wildblue\internalwebservice\configuration\AppConfigSimulator.class
+com\viasat\wildblue\internalwebservice\configuration\ConfigurationDAOSimulatorImpl.class

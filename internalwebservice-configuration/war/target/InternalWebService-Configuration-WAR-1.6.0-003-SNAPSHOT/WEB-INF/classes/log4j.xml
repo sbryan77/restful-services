@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Setup just a console appender to log to Standard Out -->
+	<appender name="ConfigConsole" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="OFF" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="=== %d{ISO8601} %-5p Thread: %-10t - %l - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- Daily rolling file appender - Roll every day - Debug Threshold -->
+	<appender name="ConfigFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="DEBUG" />
+		<param name="File" value="${catalina.base}/logs/internalwebservice-configuration.log" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="=== %d{ISO8601} %-5p Thread: %-10t - %l - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- Setup the loggers. -->
+	<logger name="com.viasat" additivity="false">
+		<level value="ERROR" />
+	   	<appender-ref ref="ConfigConsole" />
+	</logger>
+	<logger name="com.viasat.wildblue" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="ConfigFile" />
+	</logger>
+     <logger name="org.springframework" additivity="false">
+        <level value="ERROR" />
+	   	<appender-ref ref="ConfigConsole" />
+        <appender-ref ref="ConfigFile" />
+     </logger>
+	<logger name="org.apache.cxf" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="ConfigConsole" />
+		<appender-ref ref="ConfigFile" />
+	</logger>
+	<logger name="org.apache.cxf.interceptor" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="ConfigConsole" />
+		<appender-ref ref="ConfigFile" />
+	</logger>
+	<logger name="org.apache.cxf.interceptor.OutgoingChainInterceptor" additivity="false">
+		<level value="ERROR" />
+		<appender-ref ref="ConfigConsole" />
+		<appender-ref ref="ConfigFile" />
+	</logger>
+</log4j:configuration>
