@@ -1,0 +1,1 @@
+git cvsimport -v -k -p "-x" -o master -d :pserver:wbbuild@wdc1scvsp01.hq.corp.viasat.com:2401/SoftwareDev WildBlue/BuildCommon
