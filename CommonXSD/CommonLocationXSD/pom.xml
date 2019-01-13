@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<artifactId>BuildCommon</artifactId>
+		<groupId>com.viasat.wildblue</groupId>
+		<version>3.8.0-005-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.viasat.wildblue.common</groupId>
+	<artifactId>CommonLocationXSD</artifactId>
+	<version>3.1.0-002-SNAPSHOT</version>
+	<name>CommonLocationXSD</name>
+	<packaging>jar</packaging>
+
+	<scm>
+		<connection>scm:cvs:pserver:wbbuild@SCVS.WBADDC1.COM:/SoftwareDev:WildBlue/CommonXSD/CommonLocationXSD</connection>
+		<developerConnection>scm:cvs:pserver:wbbuild@SCVS.WBADDC1.COM:/SoftwareDev:WildBlue/CommonXSD/CommonLocationXSD</developerConnection>
+  </scm>
+
+	<dependencies>
+		<!-- xs:date(Time) to java.util.Date adapters -->
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>CommonXSDUtils</artifactId>
+			<version>3.1.0-002-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-runtime</artifactId>
+			<version>0.6.0</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+		
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.7.4</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>${basedir}/src/main/resources/xsd/</schemaDirectory>
+							<bindingDirectory>${basedir}/src/main/resources/binding</bindingDirectory>
+							<verbose>true</verbose>
+							<extension>true</extension>
+							<args>
+								<arg>-XtoString</arg>
+								<arg>-Xequals</arg>
+								<arg>-XhashCode</arg>
+								<arg>-Xcopyable</arg>
+							</args>
+							<plugins>
+								<plugin>
+									<groupId>org.jvnet.jaxb2_commons</groupId>
+									<artifactId>jaxb2-basics</artifactId>
+									<version>0.6.0</version>
+								</plugin>
+							</plugins>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+			</plugin>
+		</plugins>
+		
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+
+</project>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Project CommonLocationXSD.jar - Types definition XSD, version: 3.1.0-002-SNAPSHOT, build timestamp: 2018-12-25T20:06:30Z -->
+
+<xs:schema xmlns="http://www.wildblue.viasat.com/XMLSchema/v3.0/Location" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           
+           targetNamespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/Location" 
+           elementFormDefault="unqualified" 
+           attributeFormDefault="unqualified">
+           
+	<xs:complexType name="Location">
+		<xs:sequence>
+			<xs:element name="GeoPosition" type="GeoPosition" minOccurs="0"/>
+			<xs:element name="Address" type="Address" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="GeoPosition">
+		<xs:sequence>
+			<xs:element name="latitude" type="xs:double"/>
+			<xs:element name="longitude" type="xs:double"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!--  ==================================================================  -->
+	<!--  This is used for the Lat/Long coordinates                           -->
+	<!--  This will represent the international address.  Please see the      -->
+	<!--  the Wiki for more deal on how to use this.                          -->
+	<xs:complexType name="Address">
+		<xs:sequence>
+			<xs:element name="countryCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[A-Z]{3}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="postalCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="region" type="xs:string" minOccurs="0"/>
+			<xs:element name="municipality" type="xs:string" minOccurs="0"/>
+			<xs:element name="addressLine" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="type">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="postOfficeBoxAddress"/>
+					<xs:enumeration value="streetAddress"/>
+					<xs:enumeration value="militaryAddress"/>
+					<xs:enumeration value="undefined"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+
+    </xs:schema>

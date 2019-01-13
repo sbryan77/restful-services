@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<artifactId>BuildCommon</artifactId>
+		<groupId>com.viasat.wildblue</groupId>
+		<version>3.8.0-005-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.viasat.wildblue.common</groupId>
+	<artifactId>CommonDataXSD</artifactId>
+	<version>3.1.0-002-SNAPSHOT</version>
+	<name>CommonDataXSD</name>
+	<packaging>jar</packaging>
+
+	<scm>
+		<connection>scm:cvs:pserver:wbbuild@SCVS.WBADDC1.COM:/SoftwareDev:WildBlue/CommonXSD/CommonDataXSD</connection>
+		<developerConnection>scm:cvs:pserver:wbbuild@SCVS.WBADDC1.COM:/SoftwareDev:WildBlue/CommonXSD/CommonDataXSD</developerConnection>
+  </scm>
+	
+	<properties>
+		<!-- override BuildCommon -->
+		<wildblue.commonLocationXSD.version>3.1.0-002-SNAPSHOT</wildblue.commonLocationXSD.version>
+	</properties>
+
+	<dependencies>
+		<!-- xs:date(Time) to java.util.Date Adapters -->
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>CommonXSDUtils</artifactId>
+			<version>3.1.0-002-SNAPSHOT</version>
+		</dependency>
+		<!-- This project imports Location.xsd into it's XSD -->
+		<dependency>
+			<groupId>com.viasat.wildblue.common</groupId>
+			<artifactId>CommonLocationXSD</artifactId>
+			<version>3.1.0-002-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-runtime</artifactId>
+			<version>0.6.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-dependencies</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.viasat.wildblue.common</groupId>
+									<artifactId>CommonLocationXSD</artifactId>
+									<overWrite>false</overWrite>
+									<outputDirectory>${project.build.directory}/dependencies/common-xsd</outputDirectory>
+									<includes>**/*.xsd,**/*.xjb</includes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.7.4</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>${basedir}/src/main/resources/xsd/</schemaDirectory>
+							<bindingDirectory>${basedir}/src/main/resources/binding</bindingDirectory>
+							<verbose>true</verbose>
+							<extension>true</extension>
+							<episodes>
+								<!-- This keeps the imported XSD types from Location.xsd from being 
+									generated again and stuck into the jar we are creating for this project. 
+									Very important. -->
+								<episode>
+									<groupId>com.viasat.wildblue.common</groupId>
+									<artifactId>CommonLocationXSD</artifactId>
+								</episode>
+							</episodes>
+							<args>
+								<arg>-XtoString</arg>
+								<arg>-Xequals</arg>
+								<arg>-XhashCode</arg>
+								<arg>-Xcopyable</arg>
+							</args>
+							<plugins>
+								<plugin>
+									<groupId>org.jvnet.jaxb2_commons</groupId>
+									<artifactId>jaxb2-basics</artifactId>
+									<version>0.6.0</version>
+								</plugin>
+							</plugins>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>maven-replacer-plugin</artifactId>
+				<version>1.3.1</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant</artifactId>
+						<version>1.7.0</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>xsd-replace</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>target/classes/**/*.xsd</include>
+							</includes>
+							<excludes>
+								<exclude>**/*.class</exclude>
+							</excludes>
+							<replacements>
+								<replacement>
+									<token>../../../../target/dependencies/common-xsd/</token>
+									<value>../</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+			</plugin>
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+
+</project>

@@ -1,0 +1,17 @@
+<jxb:bindings version="2.0"
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	
+    <jxb:globalBindings>
+        <xjc:javaType name="java.util.Date" xmlType="xs:dateTime" adapter="com.viasat.commonxsd.adapter.XmlDateTimeToJavaDate" />
+        <xjc:javaType name="java.util.Date" xmlType="xs:date" adapter="com.viasat.commonxsd.adapter.XmlDateToJavaDate" />
+        <xjc:generateElementProperty>false</xjc:generateElementProperty> 
+    </jxb:globalBindings>
+
+    <jxb:bindings schemaLocation="../xsd/Header.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name='com.viasat.wildblue.common.header' />
+        </jxb:schemaBindings>
+    </jxb:bindings>
+</jxb:bindings>

@@ -1,0 +1,5 @@
+com\viasat\common\fault\Input.class
+com\viasat\common\fault\ObjectFactory.class
+com\viasat\common\fault\package-info.class
+com\viasat\common\fault\FaultDetail.class
+com\viasat\common\fault\ValidationError.class

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Project ${project.artifactId}.${project.packaging} - Types definition XSD, version: ${project.version}, build timestamp: ${timestamp} -->
+
+<xs:schema xmlns="http://www.wildblue.viasat.com/XMLSchema/v3.0/CommonData"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+
+           xmlns:loc="http://www.wildblue.viasat.com/XMLSchema/v3.0/Location" 
+           targetNamespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/CommonData"
+           elementFormDefault="unqualified" 
+           attributeFormDefault="unqualified">
+
+
+    <xs:import namespace="http://www.wildblue.viasat.com/XMLSchema/v3.0/Location" 
+               schemaLocation="../../../../target/dependencies/common-xsd/xsd/Location.xsd"/>
+
+    <xs:complexType name="AntennaLookAngles">
+        <xs:sequence>
+            <xs:element name="azimuth" type="xs:double"/>
+            <xs:element name="elevation" type="xs:double"/>
+            <xs:element name="skew" type="xs:double"/>
+            <xs:element name="boomArmAngle" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Contact">
+        <xs:sequence>
+            <xs:element name="person" type="Person"/>
+            <xs:element name="contactInfo" type="ContactInfo"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ContactWithDateOfBirth">
+        <xs:complexContent>
+            <xs:extension base="Contact">
+                <xs:annotation>
+                    <xs:documentation>
+                        The ContactWithDateOfBirth is a Contact with a Date of Birth field added.
+                        This is used to pass the date of birth to the CreditCheckFacade.
+                    </xs:documentation>
+                </xs:annotation>
+
+                <xs:sequence>
+                    <xs:element name="dateOfBirth" type="xs:date" nillable="true" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ContactBase">
+        <xs:sequence>
+            <xs:element name="emailAddress" type="EmailAddress" nillable="true"/>
+            <xs:element name="primaryPhone" type="PhoneNumber" nillable="true"/>
+            <xs:element name="secondaryPhone" type="PhoneNumber" nillable="true" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ContactInfo">
+        <xs:complexContent>
+            <xs:extension base="ContactBase">
+                <xs:sequence>
+                    <xs:element name="contactType" type="xs:string"/>
+                    <xs:element name="location" type="loc:Location" nillable="true"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="CustomerInfo">
+        <xs:sequence>
+            <xs:element name="accountNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="accountOID" type="xs:string" minOccurs="0"/>
+            <xs:element name="contactInfo" type="ContactInfo" nillable="true"/>
+            <xs:element name="customerType" type="xs:string" minOccurs="0"/>
+            <xs:element name="ipAddress" type="IPAddress" minOccurs="0"/>
+            <xs:element name="macAddress" type="MACAddress" minOccurs="0"/>
+            <xs:element name="marketSegment" type="xs:string" minOccurs="0"/>
+            <xs:element name="person" type="Person" nillable="true"/>
+            <xs:element name="serialNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="ticketNumber" type="xs:long" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CustomerSearchCriteria">
+        <xs:sequence>
+            <xs:element name="searchType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Default"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:group ref="CustomerSearchGroup"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:group name="CustomerSearchGroup">
+        <xs:sequence>
+            <xs:element name="phoneNumber" type="PhoneNumber" minOccurs="0"/>
+            <xs:element name="accountNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="macAddress" type="MACAddress" minOccurs="0"/>
+            <xs:element name="contactPerson" type="Person" minOccurs="0"/>
+            <xs:element name="emailAddress" type="EmailAddress" minOccurs="0"/>
+            <xs:element name="ticketNumber" type="xs:long" minOccurs="0"/>
+            <xs:element name="siteAddress" type="loc:Address" minOccurs="0"/>
+            <xs:element name="serialNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="ipAddress" type="IPAddress" minOccurs="0"/>
+        </xs:sequence>
+    </xs:group>
+    <xs:simpleType name="EmailAddress">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="EquipmentType">
+        <xs:sequence>
+            <xs:element name="modemType" type="xs:string"/>
+            <xs:element name="triaType" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="IPAddress">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:simpleType name="MACAddress">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([0-9A-Fa-f]{2}[: \-]){5}[0-9A-Fa-f]{2}"/>
+            <xs:pattern value="([0-9A-Fa-f]{4}[.]){2}[0-9A-Fa-f]{4}"/>
+            <xs:pattern value="[0-9A-Fa-f]{12}"/>
+            <xs:pattern value="[ ]{0}"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Person">
+        <xs:sequence>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="middleName" type="xs:string" minOccurs="0"/>
+            <xs:element name="lastName" type="xs:string"/>
+            <xs:element name="suffix" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="PhoneNumber">
+        <xs:annotation>
+            <xs:documentation>PhoneNumber must be 10 digits.
+                PhoneNumber may or may not include an extension
+                Extension is delimited by an upper or lower case X
+                Extension may be 1 to 5 digits
+                the X may have zero or more spaced before and/or after the X
+
+                Sample formats:
+                1234567890
+                123-456-7890
+                123.456.7890
+                1234567890x12345
+                123-456-7890 x1234
+                123.456.7890x 12345
+                123-456-7890 x 123
+</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="SiteInfo">
+        <xs:sequence>
+            <xs:element name="location" type="loc:Location"/>
+            <xs:element name="beam" type="Beam" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Beam">
+            <xs:sequence>
+                <xs:element name="beamTechnicalInfo" type="BeamTechnicalInfo"/>
+                <xs:element name="beamSalesInfo" type="BeamSalesInfo"/>
+            </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="BeamTechnicalInfo">
+            <xs:sequence>
+            <xs:element name="beamNumber" type="xs:integer"/>
+            <xs:element name="satelliteName" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Anik-F2 or WildBlue-1</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="polarization" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Left or Right</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="antennaLookAngles" type="AntennaLookAngles"/>
+            <xs:element name="antennaPointingAid" type="xs:string"/>
+            <xs:element name="gatewayId" type="xs:string" minOccurs="0"/>
+            <xs:element name="gatewayName" type="xs:string" minOccurs="0"/>
+            <xs:element name="modemInstallCode" type="xs:string"/>
+            <xs:element name="customerCode" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Customer Code is only present when BeamTechnicalInfo comes 
+                    from Provisioning.  It is not expected in the Service Availability response.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="equipmentType" type="EquipmentType"/>
+            </xs:sequence>
+     </xs:complexType>
+     <xs:complexType name="BeamSalesInfo">
+            <xs:sequence>
+                <xs:element name="salesStatus" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>OPEN, SUSPEND, or CLOSED</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="overrideStatus" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>Open, Closed, or Escalate</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="isPrimary" type="xs:boolean"/>
+            </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ValidationError">
+        <xs:sequence>
+            <xs:element name="errorCode" type="xs:string"/>
+            <xs:element name="message" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ValidationResult">
+        <xs:sequence>
+            <xs:element name="validationError" type="ValidationError" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="validationWarning" type="ValidationError" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

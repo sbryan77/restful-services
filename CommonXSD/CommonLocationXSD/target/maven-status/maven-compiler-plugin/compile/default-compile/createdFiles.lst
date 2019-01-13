@@ -1,0 +1,5 @@
+com\viasat\wildblue\common\location\Location.class
+com\viasat\wildblue\common\location\Address.class
+com\viasat\wildblue\common\location\package-info.class
+com\viasat\wildblue\common\location\GeoPosition.class
+com\viasat\wildblue\common\location\ObjectFactory.class

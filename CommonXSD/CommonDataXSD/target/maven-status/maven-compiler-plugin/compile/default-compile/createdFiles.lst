@@ -1,0 +1,17 @@
+com\viasat\wildblue\common\commondata\CustomerSearchCriteria.class
+com\viasat\wildblue\common\commondata\Contact.class
+com\viasat\wildblue\common\commondata\SiteInfo.class
+com\viasat\wildblue\common\commondata\ContactWithDateOfBirth.class
+com\viasat\wildblue\common\commondata\EquipmentType.class
+com\viasat\wildblue\common\commondata\package-info.class
+com\viasat\wildblue\common\commondata\BeamSalesInfo.class
+com\viasat\wildblue\common\commondata\BeamTechnicalInfo.class
+com\viasat\wildblue\common\commondata\AntennaLookAngles.class
+com\viasat\wildblue\common\commondata\ContactBase.class
+com\viasat\wildblue\common\commondata\Person.class
+com\viasat\wildblue\common\commondata\ValidationError.class
+com\viasat\wildblue\common\commondata\ValidationResult.class
+com\viasat\wildblue\common\commondata\ObjectFactory.class
+com\viasat\wildblue\common\commondata\CustomerInfo.class
+com\viasat\wildblue\common\commondata\Beam.class
+com\viasat\wildblue\common\commondata\ContactInfo.class
