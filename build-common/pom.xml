@@ -5,8 +5,8 @@
 		associated to the release will be taged, and updated POMs checked in reflecting 
 		the new versions -->
 	<scm>
-		<connection>scm:git:ssh://git@git.viasat.com/DenverIT/build-common.git</connection>
-		<developerConnection>scm:git:ssh://git@git.viasat.com/DenverIT/build-common.git</developerConnection>
+		<connection>scm:git:ssh://git@github.com/sbryan77/restful-services.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/sbryan77/restful-services.git</developerConnection>
 	  <tag>HEAD</tag>
   </scm>
 	<groupId>com.viasat.wildblue</groupId>
@@ -399,7 +399,6 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>${java.version}</source>
-					<test>${java.version}</test>
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>

@@ -1,8 +1,8 @@
-C:\source\viasat\WildBlue\Git\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomParamConverterProvider.java
-C:\source\viasat\WildBlue\Git\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\BraveConfig.java
-C:\source\viasat\WildBlue\Git\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomClientFilter.java
-C:\source\viasat\WildBlue\Git\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomContainerFilter.java
-C:\source\viasat\WildBlue\Git\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomJacksonJaxbJsonProvider.java
-C:\source\viasat\WildBlue\Git\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomSpanCollector.java
-C:\source\viasat\WildBlue\Git\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\OffsetDateTimeParamConverter.java
-C:\source\viasat\WildBlue\Git\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\ContainerRequestInfo.java
+D:\Source\java\restful-services\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomClientFilter.java
+D:\Source\java\restful-services\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomJacksonJaxbJsonProvider.java
+D:\Source\java\restful-services\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomSpanCollector.java
+D:\Source\java\restful-services\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\ContainerRequestInfo.java
+D:\Source\java\restful-services\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\BraveConfig.java
+D:\Source\java\restful-services\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\OffsetDateTimeParamConverter.java
+D:\Source\java\restful-services\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomParamConverterProvider.java
+D:\Source\java\restful-services\LibraryRSProviders\src\main\java\com\viasat\common\rs\providers\CustomContainerFilter.java

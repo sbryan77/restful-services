@@ -3,19 +3,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <scm>
-        <connection>scm:git:ssh://git@git.viasat.com/DenverIT/lib-internalfault.git</connection>
-        <developerConnection>scm:git:ssh://git@git.viasat.com/DenverIT/lib-internalfault.git</developerConnection>
-        <tag>Library-InternalFault-1.0.0-008</tag>
+        <connection>scm:git:ssh://git@github.com/sbryan77/restful-services.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/sbryan77/restful-services.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
     <parent>
         <artifactId>BuildCommon</artifactId>
         <groupId>com.viasat.wildblue</groupId>
-        <version>3.5.0-004</version>
+        <version>3.8.0-005-SNAPSHOT</version>
     </parent>
 
     <groupId>com.viasat.internalservice.fault</groupId>
     <artifactId>Library-InternalFault</artifactId>
-    <version>1.0.0-008</version>
+    <version>1.0.0-008-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -51,6 +51,11 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.sonarsource.sonarlint.core</groupId>
+            <artifactId>sonarlint-slf4j-sonar-log</artifactId>
+            <version>4.0.2.2142</version>
         </dependency>
     </dependencies>
 

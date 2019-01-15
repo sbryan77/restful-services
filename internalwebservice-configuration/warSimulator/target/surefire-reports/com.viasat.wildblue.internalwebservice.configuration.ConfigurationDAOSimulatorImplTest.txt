@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.viasat.wildblue.internalwebservice.configuration.ConfigurationDAOSimulatorImplTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.076 sec - in com.viasat.wildblue.internalwebservice.configuration.ConfigurationDAOSimulatorImplTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 sec - in com.viasat.wildblue.internalwebservice.configuration.ConfigurationDAOSimulatorImplTest

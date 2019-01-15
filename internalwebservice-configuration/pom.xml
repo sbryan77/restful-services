@@ -30,9 +30,10 @@
 	</modules>
 
 	<scm>
-		<connection>scm:cvs:pserver:svc_jenkins:@SCVS.WBADDC1.COM:/SoftwareDev:WildBlue/InternalWebService/Configuration</connection>
-		<developerConnection>scm:cvs:pserver:svc_jenkins:@SCVS.WBADDC1.COM:/SoftwareDev:WildBlue/InternalWebService/Configuration</developerConnection>
-  </scm>
+		<connection>scm:git:ssh://git@github.com/sbryan77/restful-services.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/sbryan77/restful-services.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 
 	<dependencyManagement>
 		<dependencies>

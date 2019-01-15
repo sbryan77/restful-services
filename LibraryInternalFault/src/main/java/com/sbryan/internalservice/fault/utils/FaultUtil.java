@@ -65,13 +65,8 @@ public class FaultUtil {
 
     public static <T extends InternalServiceFault> T faultDetailToInternalServiceFault(FaultDetail faultDetail, Class<T> type) {
         InternalServiceFault fault;
-        try {
-            fault = new InternalServiceFault();
-           // fault = (InternalServiceFault)type.newInstance();
-        } catch (IllegalAccessException | InstantiationException var4) {
-            LOGGER.error("Invalid type: " + type.getName(), var4);
-            return null;
-        }
+        fault = new InternalServiceFault();
+
 
         fault.setNode(faultDetail.getNode());
         fault.setTimestamp(faultDetail.getTimestamp());

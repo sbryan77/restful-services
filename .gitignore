@@ -1,1 +1,10 @@
 *.class
+**/jar
+**/**/*.jar
+jar
+**/target/*
+*.zip
+*.jar
+*.library
+*.properties
+

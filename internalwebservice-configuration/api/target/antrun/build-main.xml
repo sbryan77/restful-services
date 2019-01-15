@@ -4,6 +4,6 @@
   <echo message="Java version: 1.8"/>
   <echo message="CXF version: 3.1.7"/>
   <echo message="Spring version: 4.1.5.RELEASE"/>
-  <delete dir="C:\source\viasat\WildBlue\CVSProjects\WildBlue\InternalWebService\Configuration\api/target/generated-sources/cxf/com/viasat/wildblue/common"/>
+  <delete dir="D:\Source\java\restful-services\internalwebservice-configuration\api/target/generated-sources/cxf/com/viasat/wildblue/common"/>
 </target>
 </project>
