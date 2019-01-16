@@ -63,11 +63,16 @@ public class FaultUtil {
         return faultDetail;
     }
 
-    public static <T extends InternalServiceFault> T faultDetailToInternalServiceFault(FaultDetail faultDetail, Class<T> type) {
+    public static InternalServiceFault faultDetailToInternalServiceFault(FaultDetail faultDetail, Class type) {
         InternalServiceFault fault;
-        fault = new InternalServiceFault();
+   //     fault = new InternalServiceFault();
 
-
+        try {
+            fault = (InternalServiceFault)type.newInstance();
+        } catch (IllegalAccessException | InstantiationException var4) {
+            LOGGER.error("Invalid type: " + type.getName(), var4);
+            return null;
+        }
         fault.setNode(faultDetail.getNode());
         fault.setTimestamp(faultDetail.getTimestamp());
         fault.setTrackingKey(faultDetail.getTrackingKey());
