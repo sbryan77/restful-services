@@ -92,7 +92,7 @@
             <dependency>
                 <groupId>com.viasat.internalservice.fault</groupId>
                 <artifactId>Library-InternalFault</artifactId>
-                <version>1.0.0-008</version>
+                <version>1.0.0-008-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.viasat.common.rest</groupId>
