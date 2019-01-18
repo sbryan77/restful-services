@@ -33,7 +33,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.viasat.internalservice.fault</groupId>
+			<groupId>com.sbryan.internalservice.fault</groupId>
 			<artifactId>Library-InternalFault</artifactId>
 		</dependency>
 		<dependency>
