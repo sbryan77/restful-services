@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:cxf="http://cxf.apache.org/core" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+ 					http://www.springframework.org/schema/beans/spring-beans.xsd
+                    http://www.springframework.org/schema/tx
+                    http://www.springframework.org/schema/tx/spring-tx.xsd
+ 					http://cxf.apache.org/jaxws
+ 					http://cxf.apache.org/schemas/jaxws.xsd
+ 					http://cxf.apache.org/core
+ 					http://cxf.apache.org/schemas/core.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+
+    <bean id="org.apache.cxf.management.InstrumentationManager"
+          class="org.apache.cxf.management.jmx.InstrumentationManagerImpl">
+        <property name="enabled" value="true" />
+        <property name="bus" ref="cxf" />
+        <property name="createMBServerConnectorFactory" value="false" />
+        <property name="usePlatformMBeanServer" value="true" />
+        <property name="persistentBusId" value="MbeanCollector" />
+    </bean>
+
+    <!-- Wiring the counter repository -->
+    <bean id="CounterRepository" class="org.apache.cxf.management.counters.CounterRepository">
+        <property name="bus" ref="cxf" />
+    </bean>
+
+    <cxf:bus bus="cxf">
+        <cxf:properties>
+            <entry key="bus.jmx.enabled" value="true"/>
+            <entry key="bus.jmx.JMXServiceURL" value="service:jmx:rmi:///jndi/rmi://localhost:9914/jmxrmi" />
+        </cxf:properties>
+    </cxf:bus>
+
+    <tx:annotation-driven />
+</beans>

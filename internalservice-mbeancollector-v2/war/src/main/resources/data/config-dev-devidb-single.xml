@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config name="MBEAN_COLLECTOR_v2">
+    <collectorConfig>
+        <collectorKey id="mbean"/>
+        <dataBusConfig endpoint="http://databus.dev.idb.viasat.io:8080" streamName="denveritmbeanv2"/>
+        <metricDefinitions>
+            <metricDefinition name="WebserviceNumCheckedApplicationFaultsDeltaV2" field="numCheckedApplicationFaultsDelta" search="@calc=(numCheckedApplicationFaults-cacheNumCheckedApplicationFaults)"/>
+            <metricDefinition name="WebserviceNumCheckedApplicationFaultsV2" field="numCheckedApplicationFaults" search="NumCheckedApplicationFaults"/>
+        </metricDefinitions>
+        <credentials user="tomcat" password="t0mcAt"/>
+        <collectionInfos>
+            <collectionInfo collectorType="mbean" assignedCollector="collector056">
+                <collectionSource versionfilter="/SubscriberUtilitiesService/v1">
+                    <collectionQuery>http://is-subscriberutilities01.sandbox.dev.wdc1.wildblue.net:8080/manager/jmxproxy/?qry=*:type=Performance.Counter.Server,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="is-subscriberutilities01.sandbox.dev.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="is-subscriberutilities"/>
+                        <tag id="service" value="http://is-subscriberutilities01.sandbox.dev.wdc1.wildblue.net:8080/SubscriberUtilitiesService/v1/services/SubscriberUtilitiesSoapService?wsdl"/>
+                        <tag id="application" value="http://is-subscriberutilities01.sandbox.dev.wdc1.wildblue.net:8080/SubscriberUtilitiesService/v1"/>
+                        <tag id="host" value="inttcc01.sandbox.dev.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcc01"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+        </collectionInfos>
+    </collectorConfig>
+</config>

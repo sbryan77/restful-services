@@ -1,0 +1,1007 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select a VPC that allows instances access out to the Internet.
+  SubnetID:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Select at least two subnets in your selected VPC. The subnets select should be private to viasat.
+  AppVersion:
+    Type: String
+    Default: artifactory.viasat.com:8108/is-mbeancollector:2.0.2-014.1
+    Description: What version of the mbean-collector app do you want to deploy. It must exist in artifactory and the full path should be provided here.
+  ConfigDocPath:
+    Type: String
+    Default: /data/config-dev-prodidb.xml
+    AllowedValues: [/data/config-dev-devidb.xml,
+      /data/config-test-preprodidb.xml,
+      /data/config-prod.xml,
+      /data/config-dev-prodidb.xml,
+      /data/config-test-prodidb.xml]
+    ConstraintDescription: Please choose the appropriate config doc file.
+  Environment:
+    Type: String
+    Default: dev
+    Description: This will be used as a tag for billing reports. Enter dev,test,prod or whatever makes sense for grouping.
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues: [t2.micro, t2.small, t2.medium, t2.large, m3.medium, m3.large,
+      m3.xlarge, m3.2xlarge, m4.large, m4.xlarge, m4.2xlarge, m4.4xlarge, m4.10xlarge,
+      c4.large, c4.xlarge, c4.2xlarge, c4.4xlarge, c4.8xlarge, c3.large, c3.xlarge,
+      c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
+      r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
+    ConstraintDescription: Please choose a valid instance type.
+Mappings:
+  AWSRegionToAMI:
+    us-east-1:
+      AMIID: ami-eca289fb
+    us-east-2:
+      AMIID: ami-446f3521
+    us-west-1:
+      AMIID: ami-9fadf8ff
+    us-west-2:
+      AMIID: ami-7abc111a
+    eu-west-1:
+      AMIID: ami-a1491ad2
+    eu-central-1:
+      AMIID: ami-54f5303b
+    ap-northeast-1:
+      AMIID: ami-9cd57ffd
+    ap-southeast-1:
+      AMIID: ami-a900a3ca
+    ap-southeast-2:
+      AMIID: ami-5781be34
+Resources:
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+  #
+  # This is the security group for the ECS Cluster Servers (the docker servers)
+  #
+  EcsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupDescription: ECS Security Group
+      VpcId: !Ref 'VpcId'
+  #
+  # Allow HTTP from only internal viasat
+  #
+  EcsSecurityGroupHTTPinbound1:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '80'
+      ToPort: '80'
+      CidrIp: 172.16.0.0/12
+  EcsSecurityGroupHTTPinbound2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '80'
+      ToPort: '80'
+      CidrIp: 192.168.0.0/16
+  #
+  # Allow SSH from only internal viasat
+  #
+  EcsSecurityGroupSSHinbound1:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '22'
+      ToPort: '22'
+      CidrIp: 172.16.0.0/12
+  EcsSecurityGroupSSHinbound2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '22'
+      ToPort: '22'
+      CidrIp: 192.168.0.0/16
+  #
+  # Open up the port range on the hosts that we are explicitly mapping our docker containers to
+  # In this case we will start at port 9000 through 9010 to allow for 10 containers/port mappings.
+  # This is for access into the mbean-collector's healthcheck and swagger definition through a browser.
+  #
+  # Open only to internal viasat. 
+  #
+  EcsSecurityGroupALBports1:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '9000'
+      ToPort: '9010'
+      CidrIp: 172.16.0.0/12
+  EcsSecurityGroupALBports2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '9000'
+      ToPort: '9010'
+      CidrIp: 192.168.0.0/16
+  #
+  # TODO Later
+  # Leaving this as its own entry for now because eventually we will want to open up
+  # to only the CIDR blocks of all the subnets that were selected to deploy to.
+  #
+  # We need this open otherwise the healthchecks will fail on all the target groups.
+  #
+  EcsSecurityGroupALBports2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '9000'
+      ToPort: '9010'
+      CidrIp: 0.0.0.0/0
+  CloudwatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ['-', [ECSLogGroup, !Ref 'AWS::StackName']]
+      RetentionInDays: 3
+  # Task Definition 1
+  #
+  taskdefinition1:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: metrics-ecs
+        Cpu: '10'
+        Essential: 'true'
+        Image: !Ref 'AppVersion'
+        Memory: '1536'
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref 'CloudwatchLogsGroup'
+            awslogs-region: !Ref 'AWS::Region'
+            awslogs-stream-prefix: ecs-metrics-apps
+        PortMappings:
+        - ContainerPort: 8080
+          HostPort: 9000
+        Environment:
+        - Name: JAVA_OPTS
+          Value: "-Xmx1536m -Xms512m -Djavax.net.ssl.trustStore=/apps/jee/tomcat/jssecacerts"
+        - Name: javax.net.ssl.trustStore
+          Value: /apps/jee/tomcat/jssecacerts
+        - Name: LOAD_LOCATION
+          Value: !Ref 'ConfigDocPath'
+        - Name: COLLECTOR_ID
+          Value: collector001,collector002,collector003,collector004,collector005,collector006,collector007,collector008,collector009,collector010,collector011,collector012,collector013,collector014,collector015,collector016,collector017,collector018,collector019,collector020,collector021,collector022,collector023
+  taskdefinition2:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: metrics-ecs2
+        Cpu: '10'
+        Essential: 'true'
+        Image: !Ref 'AppVersion'
+        Memory: '1536'
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref 'CloudwatchLogsGroup'
+            awslogs-region: !Ref 'AWS::Region'
+            awslogs-stream-prefix: ecs-metrics-apps
+        PortMappings:
+        - ContainerPort: 8080
+          HostPort: 9001
+        Environment:
+        - Name: JAVA_OPTS
+          Value: "-Xmx1536m -Xms512m -Djavax.net.ssl.trustStore=/apps/jee/tomcat/jssecacerts"
+        - Name: javax.net.ssl.trustStore
+          Value: /apps/jee/tomcat/jssecacerts
+        - Name: LOAD_LOCATION
+          Value: !Ref 'ConfigDocPath'
+        - Name: COLLECTOR_ID
+          Value: collector024,collector025,collector026,collector027,collector028,collector029,collector030,collector031,collector032,collector033,collector034,collector035,collector036,collector037,collector038,collector039,collector040,collector041,collector042,collector043,collector044,collector045,collector046
+  taskdefinition3:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: metrics-ecs3
+        Cpu: '10'
+        Essential: 'true'
+        Image: !Ref 'AppVersion'
+        Memory: '1536'
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref 'CloudwatchLogsGroup'
+            awslogs-region: !Ref 'AWS::Region'
+            awslogs-stream-prefix: ecs-metrics-apps
+        PortMappings:
+        - ContainerPort: 8080
+          HostPort: 9002
+        Environment:
+        - Name: JAVA_OPTS
+          Value: "-Xmx1536m -Xms512m -Djavax.net.ssl.trustStore=/apps/jee/tomcat/jssecacerts"
+        - Name: javax.net.ssl.trustStore
+          Value: /apps/jee/tomcat/jssecacerts
+        - Name: LOAD_LOCATION
+          Value: !Ref 'ConfigDocPath'
+        - Name: COLLECTOR_ID
+          Value: collector047,collector048,collector049,collector050,collector051,collector052,collector053,collector054,collector055,collector056,collector057,collector058,collector059,collector060,collector061,collector062,collector063,collector064,collector065,collector066
+  taskdefinition4:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: metrics-ecs4
+        Cpu: '10'
+        Essential: 'true'
+        Image: !Ref 'AppVersion'
+        Memory: '1536'
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref 'CloudwatchLogsGroup'
+            awslogs-region: !Ref 'AWS::Region'
+            awslogs-stream-prefix: ecs-metrics-apps
+        PortMappings:
+        - ContainerPort: 8080
+          HostPort: 9003
+        Environment:
+        - Name: JAVA_OPTS
+          Value: "-Xmx1536m -Xms512m -Djavax.net.ssl.trustStore=/apps/jee/tomcat/jssecacerts"
+        - Name: javax.net.ssl.trustStore
+          Value: /apps/jee/tomcat/jssecacerts
+        - Name: LOAD_LOCATION
+          Value: !Ref 'ConfigDocPath'
+        - Name: COLLECTOR_ID
+          Value: collector067,collector068,collector069,collector070,collector071,collector072,collector073,collector074,collector075,collector076,collector077,collector078,collector079,collector080,collector081,collector082,collector083,collector084,collector085,collector086
+  taskdefinition5:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: metrics-ecs5
+        Cpu: '10'
+        Essential: 'true'
+        Image: !Ref 'AppVersion'
+        Memory: '1536'
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref 'CloudwatchLogsGroup'
+            awslogs-region: !Ref 'AWS::Region'
+            awslogs-stream-prefix: ecs-metrics-apps
+        PortMappings:
+        - ContainerPort: 8080
+          HostPort: 9004
+        Environment:
+        - Name: JAVA_OPTS
+          Value: "-Xmx1536m -Xms512m -Djavax.net.ssl.trustStore=/apps/jee/tomcat/jssecacerts"
+        - Name: javax.net.ssl.trustStore
+          Value: /apps/jee/tomcat/jssecacerts
+        - Name: LOAD_LOCATION
+          Value: !Ref 'ConfigDocPath'
+        - Name: COLLECTOR_ID
+          Value: collector087,collector088,collector089,collector090,collector091,collector092,collector093,collector094,collector095,collector096,collector097,collector098,collector099,collector100,collector101,collector102,collector103,collector104,collector105,collector106,collector107,collector108,collector109,collector110,collector111,collector112
+  # 
+  # Our Load Balancer for this cluster. (one LB servicing the entire cluster, different listener for each service)
+  #
+  ECSALBmetrics:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      #Name: ECSALBmetrics
+      Scheme: internal
+      LoadBalancerAttributes:
+      - Key: idle_timeout.timeout_seconds
+        Value: '30'
+      Subnets: !Ref 'SubnetID'
+      SecurityGroups: [!Ref 'EcsSecurityGroup']
+  # 
+  # Default Listener. Not sure if I can remove this or not.
+  # Doesn't hurt anything to leave it in for now.
+  #
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ECSServiceRole
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics1'
+      LoadBalancerArn: !Ref 'ECSALBmetrics'
+      Port: '80'
+      Protocol: HTTP
+
+  # 
+  # Listener for service1, port 9000
+  #
+  ALBListener1:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ECSServiceRole
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics1'
+      LoadBalancerArn: !Ref 'ECSALBmetrics'
+      Port: '9000'
+      Protocol: HTTP
+  # 
+  # Listener for service2, port 9001
+  #
+  ALBListener2:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ECSServiceRole
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics2'
+      LoadBalancerArn: !Ref 'ECSALBmetrics'
+      Port: '9001'
+      Protocol: HTTP
+  # 
+  # Listener for service3, port 9002
+  #
+  ALBListener3:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ECSServiceRole
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics3'
+      LoadBalancerArn: !Ref 'ECSALBmetrics'
+      Port: '9002'
+      Protocol: HTTP
+  # 
+  # Listener for service4, port 9003
+  #
+  ALBListener4:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ECSServiceRole
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics4'
+      LoadBalancerArn: !Ref 'ECSALBmetrics'
+      Port: '9003'
+      Protocol: HTTP
+  # 
+  # Listener for service5, port 9004
+  #
+  ALBListener5:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ECSServiceRole
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics5'
+      LoadBalancerArn: !Ref 'ECSALBmetrics'
+      Port: '9004'
+      Protocol: HTTP
+  # 
+  # Listener Rule for service 1
+  #
+  ECSALBListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    DependsOn: ALBListener
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics1'
+      Conditions:
+      - Field: path-pattern
+        Values: [/]
+      ListenerArn: !Ref 'ALBListener'
+      Priority: 1
+  # 
+  # Listener Rule for service 2
+  #
+  ECSALBListenerRule2:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    DependsOn: ALBListener2
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics2'
+      Conditions:
+      - Field: path-pattern
+        Values: [/]
+      ListenerArn: !Ref 'ALBListener2'
+      Priority: 1
+  # 
+  # Listener Rule for service 3
+  #
+  ECSALBListenerRule3:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    DependsOn: ALBListener3
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics3'
+      Conditions:
+      - Field: path-pattern
+        Values: [/]
+      ListenerArn: !Ref 'ALBListener3'
+      Priority: 1
+  # 
+  # Listener Rule for service 4
+  #
+  ECSALBListenerRule4:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    DependsOn: ALBListener4
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics4'
+      Conditions:
+      - Field: path-pattern
+        Values: [/]
+      ListenerArn: !Ref 'ALBListener4'
+      Priority: 1
+  # 
+  # Listener Rule for service 5
+  #
+  ECSALBListenerRule5:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    DependsOn: ALBListener5
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics5'
+      Conditions:
+      - Field: path-pattern
+        Values: [/]
+      ListenerArn: !Ref 'ALBListener5'
+      Priority: 1
+  #
+  # Target group for service1
+  #
+  ECSTGmetrics1:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: ECSALBmetrics
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /InternalService-MbeanCollector/TCS/
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      #Name: ECSTGmetrics1
+      Port: 9000
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VpcId'
+  #
+  # Target group for service2
+  #
+  ECSTGmetrics2:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: ECSALBmetrics
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /InternalService-MbeanCollector/TCS/
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      #Name: ECSTGmetrics2
+      Port: 9001
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VpcId'
+  #
+  # Target group for service3
+  #
+  ECSTGmetrics3:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: ECSALBmetrics
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /InternalService-MbeanCollector/TCS/
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      #Name: ECSTGmetrics3
+      Port: 9002
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VpcId'
+  #
+  # Target group for service4
+  #
+  ECSTGmetrics4:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: ECSALBmetrics
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /InternalService-MbeanCollector/TCS/
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      #Name: ECSTGmetrics4
+      Port: 9003
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VpcId'
+  #
+  # Target group for service5
+  #
+  ECSTGmetrics5:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: ECSALBmetrics
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /InternalService-MbeanCollector/TCS/
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      #Name: ECSTGmetrics5
+      Port: 9004
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VpcId'      
+  ECSAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+        PropagateAtLaunch: "true"
+      - Key: "env"
+        Value: !Ref 'Environment'
+        PropagateAtLaunch: "true"
+      VPCZoneIdentifier: !Ref 'SubnetID'
+      LaunchConfigurationName: !Ref 'ContainerInstances'
+      MinSize: '1'
+      MaxSize: 3
+      DesiredCapacity: 3
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    UpdatePolicy:
+      AutoScalingReplacingUpdate:
+        WillReplace: 'true'
+  #
+  # Launch Configuration for our cluster/docker servers
+  # Defines things like:
+  # - where to pull docker images from
+  # - which cluster to notify when it's ready to join
+  # - The AMI image to use, etc. 
+  #
+  ContainerInstances:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !FindInMap [AWSRegionToAMI, !Ref 'AWS::Region', AMIID]
+      AssociatePublicIpAddress: true
+      SecurityGroups: [!Ref 'EcsSecurityGroup']
+      InstanceType: !Ref 'InstanceType'
+      IamInstanceProfile: !Ref 'EC2InstanceProfile'
+      KeyName: !Ref 'KeyName'
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          echo ECS_CLUSTER=${ECSCluster} >> /etc/ecs/ecs.config
+          echo ECS_ENGINE_AUTH_TYPE=dockercfg >> /etc/ecs/ecs.config
+          echo ECS_ENGINE_AUTH_DATA={"artifactory.viasat.com:8108":{"auth":"bGhlbmRlcnNvbjo5MDFXR2lic29u","email":"lisa.henderson@viasat.com"}} >> /etc/ecs/ecs.config
+          yum install -y aws-cfn-bootstrap
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource ECSAutoScalingGroup --region ${AWS::Region}
+  # 
+  # service 1
+  #
+  service1:
+    Type: AWS::ECS::Service
+    DependsOn: ALBListener
+    Properties:
+      Cluster: !Ref 'ECSCluster'
+      DesiredCount: '1'
+      LoadBalancers:
+      - ContainerName: metrics-ecs
+        ContainerPort: '8080'
+        TargetGroupArn: !Ref 'ECSTGmetrics1'
+      Role: !Ref 'ECSServiceRole'
+      TaskDefinition: !Ref 'taskdefinition1'
+  # 
+  # service2
+  #
+  service2:
+    Type: AWS::ECS::Service
+    DependsOn: ALBListener2
+    Properties:
+      Cluster: !Ref 'ECSCluster'
+      DesiredCount: '1'
+      LoadBalancers:
+      - ContainerName: metrics-ecs2
+        ContainerPort: '8080'
+        TargetGroupArn: !Ref 'ECSTGmetrics2'
+      Role: !Ref 'ECSServiceRole'
+      TaskDefinition: !Ref 'taskdefinition2'
+  # 
+  # service3
+  #
+  service3:
+    Type: AWS::ECS::Service
+    DependsOn: ALBListener3
+    Properties:
+      Cluster: !Ref 'ECSCluster'
+      DesiredCount: '1'
+      LoadBalancers:
+      - ContainerName: metrics-ecs3
+        ContainerPort: '8080'
+        TargetGroupArn: !Ref 'ECSTGmetrics3'
+      Role: !Ref 'ECSServiceRole'
+      TaskDefinition: !Ref 'taskdefinition3'
+  # 
+  # service4
+  #
+  service4:
+    Type: AWS::ECS::Service
+    DependsOn: ALBListener4
+    Properties:
+      Cluster: !Ref 'ECSCluster'
+      DesiredCount: '1'
+      LoadBalancers:
+      - ContainerName: metrics-ecs4
+        ContainerPort: '8080'
+        TargetGroupArn: !Ref 'ECSTGmetrics4'
+      Role: !Ref 'ECSServiceRole'
+      TaskDefinition: !Ref 'taskdefinition4'
+  # 
+  # service5
+  #
+  service5:
+    Type: AWS::ECS::Service
+    DependsOn: ALBListener5
+    Properties:
+      Cluster: !Ref 'ECSCluster'
+      DesiredCount: '1'
+      LoadBalancers:
+      - ContainerName: metrics-ecs5
+        ContainerPort: '8080'
+        TargetGroupArn: !Ref 'ECSTGmetrics5'
+      Role: !Ref 'ECSServiceRole'
+      TaskDefinition: !Ref 'taskdefinition5'
+  ECSServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: ['elasticloadbalancing:DeregisterInstancesFromLoadBalancer', 'elasticloadbalancing:DeregisterTargets',
+              'elasticloadbalancing:Describe*', 'elasticloadbalancing:RegisterInstancesWithLoadBalancer',
+              'elasticloadbalancing:RegisterTargets', 'ec2:Describe*', 'ec2:AuthorizeSecurityGroupIngress']
+            Resource: '*'
+  ServiceScalingTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: service1
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join ['', [service/, !Ref 'ECSCluster', /, !GetAtt [service1, Name]]]
+      RoleARN: !GetAtt [AutoscalingRole, Arn]
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+  ServiceScalingTarget2:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: service2
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join ['', [service/, !Ref 'ECSCluster', /, !GetAtt [service2, Name]]]
+      RoleARN: !GetAtt [AutoscalingRole, Arn]
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+  ServiceScalingTarget3:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: service3
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join ['', [service/, !Ref 'ECSCluster', /, !GetAtt [service3, Name]]]
+      RoleARN: !GetAtt [AutoscalingRole, Arn]
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+  ServiceScalingTarget4:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: service4
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join ['', [service/, !Ref 'ECSCluster', /, !GetAtt [service4, Name]]]
+      RoleARN: !GetAtt [AutoscalingRole, Arn]
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+  ServiceScalingTarget5:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: service5
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join ['', [service/, !Ref 'ECSCluster', /, !GetAtt [service5, Name]]]
+      RoleARN: !GetAtt [AutoscalingRole, Arn]
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+  ServiceScalingPolicy1:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: AStepPolicy
+      PolicyType: StepScaling
+      ScalingTargetId: !Ref 'ServiceScalingTarget'
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 60
+        MetricAggregationType: Average
+        StepAdjustments:
+        - MetricIntervalLowerBound: 0
+          ScalingAdjustment: 200
+  ServiceScalingPolicy2:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: AStepPolicy
+      PolicyType: StepScaling
+      ScalingTargetId: !Ref 'ServiceScalingTarget2'
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 60
+        MetricAggregationType: Average
+        StepAdjustments:
+        - MetricIntervalLowerBound: 0
+          ScalingAdjustment: 200
+  ServiceScalingPolicy3:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: AStepPolicy
+      PolicyType: StepScaling
+      ScalingTargetId: !Ref 'ServiceScalingTarget3'
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 60
+        MetricAggregationType: Average
+        StepAdjustments:
+        - MetricIntervalLowerBound: 0
+          ScalingAdjustment: 200
+  ServiceScalingPolicy4:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: AStepPolicy
+      PolicyType: StepScaling
+      ScalingTargetId: !Ref 'ServiceScalingTarget4'
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 60
+        MetricAggregationType: Average
+        StepAdjustments:
+        - MetricIntervalLowerBound: 0
+          ScalingAdjustment: 200
+  ServiceScalingPolicy5:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: AStepPolicy
+      PolicyType: StepScaling
+      ScalingTargetId: !Ref 'ServiceScalingTarget5'
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 60
+        MetricAggregationType: Average
+        StepAdjustments:
+        - MetricIntervalLowerBound: 0
+          ScalingAdjustment: 200
+  ALB500sAlarmScaleUp:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      EvaluationPeriods: '1'
+      Statistic: Average
+      Threshold: '10'
+      AlarmDescription: Alarm if our ALB generates too many HTTP 500s.
+      Period: '60'
+      AlarmActions: [!Ref 'ServiceScalingPolicy1']
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+      - Name: ECSService
+        Value: !Ref 'service1'
+      ComparisonOperator: GreaterThanThreshold
+      MetricName: HTTPCode_ELB_5XX_Count
+  ALB500sAlarmScaleUp2:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      EvaluationPeriods: '1'
+      Statistic: Average
+      Threshold: '10'
+      AlarmDescription: Alarm if our ALB generates too many HTTP 500s.
+      Period: '60'
+      AlarmActions: [!Ref 'ServiceScalingPolicy2']
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+      - Name: ECSService
+        Value: !Ref 'service2'
+      ComparisonOperator: GreaterThanThreshold
+      MetricName: HTTPCode_ELB_5XX_Count
+  ALB500sAlarmScaleUp3:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      EvaluationPeriods: '1'
+      Statistic: Average
+      Threshold: '10'
+      AlarmDescription: Alarm if our ALB generates too many HTTP 500s.
+      Period: '60'
+      AlarmActions: [!Ref 'ServiceScalingPolicy3']
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+      - Name: ECSService
+        Value: !Ref 'service3'
+      ComparisonOperator: GreaterThanThreshold
+      MetricName: HTTPCode_ELB_5XX_Count
+  ALB500sAlarmScaleUp4:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      EvaluationPeriods: '1'
+      Statistic: Average
+      Threshold: '10'
+      AlarmDescription: Alarm if our ALB generates too many HTTP 500s.
+      Period: '60'
+      AlarmActions: [!Ref 'ServiceScalingPolicy4']
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+      - Name: ECSService
+        Value: !Ref 'service4'
+      ComparisonOperator: GreaterThanThreshold
+      MetricName: HTTPCode_ELB_5XX_Count
+  ALB500sAlarmScaleUp5:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      EvaluationPeriods: '1'
+      Statistic: Average
+      Threshold: '10'
+      AlarmDescription: Alarm if our ALB generates too many HTTP 500s.
+      Period: '60'
+      AlarmActions: [!Ref 'ServiceScalingPolicy5']
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+      - Name: ECSService
+        Value: !Ref 'service5'
+      ComparisonOperator: GreaterThanThreshold
+      MetricName: HTTPCode_ELB_5XX_Count
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ec2.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: ['ecs:CreateCluster', 'ecs:DeregisterContainerInstance', 'ecs:DiscoverPollEndpoint',
+              'ecs:Poll', 'ecs:RegisterContainerInstance', 'ecs:StartTelemetrySession',
+              'ecs:Submit*', 'logs:CreateLogStream', 'logs:PutLogEvents']
+            Resource: '*'
+  AutoscalingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [application-autoscaling.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: service-autoscaling
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: ['application-autoscaling:*', 'cloudwatch:DescribeAlarms', 'cloudwatch:PutMetricAlarm',
+              'ecs:DescribeServices', 'ecs:UpdateService']
+            Resource: '*'
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles: [!Ref 'EC2Role']
+Outputs:
+  ecsservice1:
+    Value: !Ref 'service1'
+  ecsservice2:
+    Value: !Ref 'service2'
+  ecsservice3:
+    Value: !Ref 'service3'
+  ecsservice4:
+    Value: !Ref 'service4'
+  ecsservice5:
+    Value: !Ref 'service5'
+  ecscluster:
+    Value: !Ref 'ECSCluster'
+  ECSALBmetrics:
+    Description: Your ALB DNS URL
+    Value: !Join ['', [!GetAtt [ECSALBmetrics, DNSName]]]  
+  taskdef1:
+    Value: !Ref 'taskdefinition1'
+  taskdef2:
+    Value: !Ref 'taskdefinition2'
+  taskdef3:
+    Value: !Ref 'taskdefinition3'
+  taskdef4:
+    Value: !Ref 'taskdefinition4'
+  taskdef5:
+    Value: !Ref 'taskdefinition5'

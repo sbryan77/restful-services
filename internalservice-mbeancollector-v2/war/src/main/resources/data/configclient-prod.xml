@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config name="MBEAN_COLLECTOR_v2">
+    <collectorConfig>
+        <collectorKey id="mbean"/>
+        <dataBusConfig endpoint="http://databus.idb.viasat.io:8080" streamName="denveritclientmbean"/>
+        <metricDefinitions>
+            <metricDefinition name="WebserviceClientAverageResponseTime" field="averageResponseTime" search="@calc=(totalHandlingTime-cachetotalHandlingTime)/(numInvocations-cacheNumInvocations)"/>
+            <metricDefinition name="WebserviceClientInvocationCountDelta" field="invocationCountDelta" search="@calc=(numInvocations-cacheNumInvocations)"/>
+            <metricDefinition name="WebserviceClientTotalHandlingTimeDelta" field="totalHandlingTimeDelta" search="@calc=(totalHandlingTime-cacheTotalHandlingTime)"/>
+            <metricDefinition name="WebserviceClientNumUnCheckedApplicationFaultsDelta" field="numUncheckedApplicationFaultsDelta" search="@calc=(numUnCheckedApplicationFaults-cacheNumUnCheckedApplicationFaults)"/>
+            <metricDefinition name="WebserviceClientNumCheckedApplicationFaultsDelta" field="numCheckedApplicationFaultsDelta" search="@calc=(numCheckedApplicationFaults-cacheNumCheckedApplicationFaults)"/>
+            <metricDefinition name="WebserviceClientNumLogicalRuntimeFaultsDelta" field="numLogicalRuntimeFaultsDelta" search="NumLogicalRuntimeFaultsDelta"/>
+            <metricDefinition name="WebserviceClientInvocationCount" field="numInvocations" search="NumInvocations"/>
+            <metricDefinition name="WebserviceClientTotalHandlingTime" field="totalHandlingTime" search="TotalHandlingTime"/>
+            <metricDefinition name="WebserviceClientNumUnCheckedApplicationFaults" field="numUnCheckedApplicationFaults" search="NumUnCheckedApplicationFaults"/>
+            <metricDefinition name="WebserviceClientNumCheckedApplicationFaults" field="numCheckedApplicationFaults" search="NumCheckedApplicationFaults"/>
+            <metricDefinition name="WebserviceClientNumLogicalRuntimeFaults" field="numLogicalRuntimeFaults" search="NumLogicalRuntimeFaults"/>
+        </metricDefinitions>
+        <credentials user="tomcat" password="t0mcAt"/>
+        <collectionInfos>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector001">
+                <collectionSource versionfilter="/Batch-IspSender/v1">
+                    <collectionQuery>https://batch-ispsender01.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="batch-ispsender01.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="batch-ispsender"/>
+                        <tag id="service" value="https://batch-ispsender01.prod.wdc1.wildblue.net:8443/Batch-IspSender/v1/services/IspSenderSubmitBatch?wsdl"/>
+                        <tag id="application" value="https://batch-ispsender01.prod.wdc1.wildblue.net:8443/Batch-IspSender/v1"/>
+                        <tag id="host" value="inttcd01.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcd01"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector001">
+                <collectionSource versionfilter="/Batch-IspSender/v1">
+                    <collectionQuery>https://batch-ispsender02.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="batch-ispsender02.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="batch-ispsender"/>
+                        <tag id="service" value="https://batch-ispsender02.prod.wdc1.wildblue.net:8443/Batch-IspSender/v1/services/IspSenderSubmitBatch?wsdl"/>
+                        <tag id="application" value="https://batch-ispsender02.prod.wdc1.wildblue.net:8443/Batch-IspSender/v1"/>
+                        <tag id="host" value="inttcd02.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcd02"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector002">
+                <collectionSource versionfilter="/Batch-NotificationSender/v1">
+                    <collectionQuery>https://batch-notificationsender01.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="batch-notificationsender01.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="batch-notificationsender"/>
+                        <tag id="service" value="https://batch-notificationsender01.prod.wdc1.wildblue.net:8443/Batch-NotificationSender/v1/services/NotificationSenderBatch?wsdl"/>
+                        <tag id="application" value="https://batch-notificationsender01.prod.wdc1.wildblue.net:8443/Batch-NotificationSender/v1"/>
+                        <tag id="host" value="inttcd01.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcd01"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector002">
+                <collectionSource versionfilter="/Batch-NotificationSender/v1">
+                    <collectionQuery>https://batch-notificationsender02.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="batch-notificationsender02.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="batch-notificationsender"/>
+                        <tag id="service" value="https://batch-notificationsender02.prod.wdc1.wildblue.net:8443/Batch-NotificationSender/v1/services/NotificationSenderBatch?wsdl"/>
+                        <tag id="application" value="https://batch-notificationsender02.prod.wdc1.wildblue.net:8443/Batch-NotificationSender/v1"/>
+                        <tag id="host" value="inttcd02.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcd02"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector003">
+                <collectionSource versionfilter="/Facade-Provisioning-SDP/v1">
+                    <collectionQuery>https://fcd-provisioningsdp01.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="fcd-provisioningsdp01.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="fcd-provisioningsdp"/>
+                        <tag id="service" value="https://fcd-provisioningsdp01.prod.wdc1.wildblue.net:8443/Facade-Provisioning-SDP/v1/services/ProvisioningFacadeSDP?wsdl"/>
+                        <tag id="application" value="https://fcd-provisioningsdp01.prod.wdc1.wildblue.net:8443/Facade-Provisioning-SDP/v1"/>
+                        <tag id="host" value="inttcb01.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcb01"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector003">
+                <collectionSource versionfilter="/Facade-Provisioning-SDP/v1">
+                    <collectionQuery>https://fcd-provisioningsdp02.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="fcd-provisioningsdp02.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="fcd-provisioningsdp"/>
+                        <tag id="service" value="https://fcd-provisioningsdp02.prod.wdc1.wildblue.net:8443/Facade-Provisioning-SDP/v1/services/ProvisioningFacadeSDP?wsdl"/>
+                        <tag id="application" value="https://fcd-provisioningsdp02.prod.wdc1.wildblue.net:8443/Facade-Provisioning-SDP/v1"/>
+                        <tag id="host" value="inttcb02.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcb02"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector003">
+                <collectionSource versionfilter="/Facade-Provisioning-SDP/v1">
+                    <collectionQuery>https://fcd-provisioningsdp03.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="fcd-provisioningsdp03.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="fcd-provisioningsdp"/>
+                        <tag id="service" value="https://fcd-provisioningsdp03.prod.wdc1.wildblue.net:8443/Facade-Provisioning-SDP/v1/services/ProvisioningFacadeSDP?wsdl"/>
+                        <tag id="application" value="https://fcd-provisioningsdp03.prod.wdc1.wildblue.net:8443/Facade-Provisioning-SDP/v1"/>
+                        <tag id="host" value="inttcb03.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcb03"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector004">
+                <collectionSource versionfilter="/Facade-ServiceActivationSDP/v1">
+                    <collectionQuery>https://fcd-serviceactivationsdp01.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="fcd-serviceactivationsdp01.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="fcd-serviceactivationsdp"/>
+                        <tag id="service" value="https://fcd-serviceactivationsdp01.prod.wdc1.wildblue.net:8443/Facade-ServiceActivationSDP/v1/services/ServiceActivationService?wsdl"/>
+                        <tag id="application" value="https://fcd-serviceactivationsdp01.prod.wdc1.wildblue.net:8443/Facade-ServiceActivationSDP/v1"/>
+                        <tag id="host" value="inttcc01.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcc01"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector004">
+                <collectionSource versionfilter="/Facade-ServiceActivationSDP/v1">
+                    <collectionQuery>https://fcd-serviceactivationsdp02.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="fcd-serviceactivationsdp02.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="fcd-serviceactivationsdp"/>
+                        <tag id="service" value="https://fcd-serviceactivationsdp02.prod.wdc1.wildblue.net:8443/Facade-ServiceActivationSDP/v1/services/ServiceActivationService?wsdl"/>
+                        <tag id="application" value="https://fcd-serviceactivationsdp02.prod.wdc1.wildblue.net:8443/Facade-ServiceActivationSDP/v1"/>
+                        <tag id="host" value="inttcc02.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcc02"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector004">
+                <collectionSource versionfilter="/Facade-ServiceActivationSDP/v1">
+                    <collectionQuery>https://fcd-serviceactivationsdp03.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="fcd-serviceactivationsdp03.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="fcd-serviceactivationsdp"/>
+                        <tag id="service" value="https://fcd-serviceactivationsdp03.prod.wdc1.wildblue.net:8443/Facade-ServiceActivationSDP/v1/services/ServiceActivationService?wsdl"/>
+                        <tag id="application" value="https://fcd-serviceactivationsdp03.prod.wdc1.wildblue.net:8443/Facade-ServiceActivationSDP/v1"/>
+                        <tag id="host" value="inttcc03.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcc03"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector005">
+                <collectionSource versionfilter="/ServiceAvailability/v2">
+                    <collectionQuery>https://iws-serviceavailability01.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="iws-serviceavailability01.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="iws-serviceavailability"/>
+                        <tag id="service" value="https://iws-serviceavailability01.prod.wdc1.wildblue.net:8443/ServiceAvailability/v2/services/ServiceAvailabilityService?wsdl"/>
+                        <tag id="application" value="https://iws-serviceavailability01.prod.wdc1.wildblue.net:8443/ServiceAvailability/v2"/>
+                        <tag id="host" value="inttcb01.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcb01"/>
+                        <tag id="version" value="v2"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector005">
+                <collectionSource versionfilter="/ServiceAvailability/v2">
+                    <collectionQuery>https://iws-serviceavailability02.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="iws-serviceavailability02.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="iws-serviceavailability"/>
+                        <tag id="service" value="https://iws-serviceavailability02.prod.wdc1.wildblue.net:8443/ServiceAvailability/v2/services/ServiceAvailabilityService?wsdl"/>
+                        <tag id="application" value="https://iws-serviceavailability02.prod.wdc1.wildblue.net:8443/ServiceAvailability/v2"/>
+                        <tag id="host" value="inttcb02.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcb02"/>
+                        <tag id="version" value="v2"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector005">
+                <collectionSource versionfilter="/ServiceAvailability/v2">
+                    <collectionQuery>https://iws-serviceavailability03.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="iws-serviceavailability03.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="iws-serviceavailability"/>
+                        <tag id="service" value="https://iws-serviceavailability03.prod.wdc1.wildblue.net:8443/ServiceAvailability/v2/services/ServiceAvailabilityService?wsdl"/>
+                        <tag id="application" value="https://iws-serviceavailability03.prod.wdc1.wildblue.net:8443/ServiceAvailability/v2"/>
+                        <tag id="host" value="inttcb03.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcb03"/>
+                        <tag id="version" value="v2"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector006">
+                <collectionSource versionfilter="N/A">
+                    <collectionQuery>https://spyglass01.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="spyglass01.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="spyglass"/>
+                        <tag id="service" value="N/A"/>
+                        <tag id="application" value="https://spyglass01.prod.wdc1.wildblue.net:8443"/>
+                        <tag id="host" value="N/A"/>
+                        <tag id="hostGroup" value="N/A"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector006">
+                <collectionSource versionfilter="/SpyGlass">
+                    <collectionQuery>https://spyglass01.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="spyglass01.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="spyglass"/>
+                        <tag id="service" value="https://spyglass01.prod.wdc1.wildblue.net:8443/SpyGlass/services/datamanagement?_wadl"/>
+                        <tag id="application" value="https://spyglass01.prod.wdc1.wildblue.net:8443/SpyGlass"/>
+                        <tag id="host" value="spyglass01.prod.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="spyglass01"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbeanClient" assignedCollector="collector006">
+                <collectionSource versionfilter="N/A">
+                    <collectionQuery>https://spyglass01.prod.wdc1.wildblue.net:8443/manager/jmxproxy/?qry=*:type=Performance.Counter.Client,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="spyglass01.prod.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="spyglass"/>
+                        <tag id="service" value="N/A"/>
+                        <tag id="application" value="https://spyglass01.prod.wdc1.wildblue.net:8443"/>
+                        <tag id="host" value="N/A"/>
+                        <tag id="hostGroup" value="N/A"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+        </collectionInfos>
+    </collectorConfig>
+</config>

@@ -1,0 +1,11 @@
+.classpath
+.project
+.settings
+target
+build-number.txt
+assembly
+*.log*
+.idea
+*.iml
+*.class
+bin

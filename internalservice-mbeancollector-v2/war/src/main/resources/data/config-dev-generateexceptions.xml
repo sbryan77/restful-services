@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<config name="MBEAN_COLLECTOR_v2">
+    <collectorConfig>
+        <collectorKey id="mbean"/>
+        <dataBusConfig endpoint="http://databus.dev.idb.viasat.io:8080" streamName="denveritmbeanv2"/>
+        <metricDefinitions>
+            <metricDefinition name="WebserviceAverageResponseTimeV2" field="averageResponseTime" search="@calc=(totalHandlingTime-cachetotalHandlingTime)/(numInvocations-cacheNumInvocations)"/>
+            <metricDefinition name="WebserviceInvocationCountDeltaV2" field="invocationCountDelta" search="@calc=(numInvocations-cacheNumInvocations)"/>
+            <metricDefinition name="WebserviceTotalHandlingTimeDeltaV2" field="totalHandlingTimeDelta" search="@calc=(totalHandlingTime-cacheTotalHandlingTime)"/>
+            <metricDefinition name="WebserviceInvocationCountV2" field="numInvocations" search="NumInvocations"/>
+            <metricDefinition name="WebserviceTotalHandlingTimeV2" field="totalHandlingTime" search="TotalHandlingTime"/>
+        </metricDefinitions>
+        <credentials user="tomcat" password="t0mcAt"/>
+        <collectionInfos>
+            <collectionInfo collectorType="mbean" assignedCollector="collector001">
+                <collectionSource versionfilter="/Batch-AAABridge">
+                    <collectionQuery>http://batch-aaabridge01.sandbox.dev.wdc1.wildblue.net:8080/manager/jmxproxy/?qry=*:type=Performance.Counter.Server,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="batch-aaabridge01.sandbox.dev.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="batch-aaabridge"/>
+                        <tag id="service" value="http://batch-aaabridge01.sandbox.dev.wdc1.wildblue.net:8080/Batch-AAABridge"/>
+                        <tag id="application" value="http://batch-aaabridge01.sandbox.dev.wdc1.wildblue.net:8080/Batch-AAABridge"/>
+                        <tag id="host" value="inttcd01.sandbox.dev.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcd01"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbean" assignedCollector="collector001">
+                <collectionSource versionfilter="/Batch-AAABridge">
+                    <collectionQuery>http://batch-aaabridge02.sandbox.dev.wdc1.wildblue.net:8080/manager/jmxproxy/?qry=*:type=Performance.Counter.Server,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="batch-aaabridge02.sandbox.dev.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="batch-aaabridge"/>
+                        <tag id="service" value="http://batch-aaabridge02.sandbox.dev.wdc1.wildblue.net:8080/Batch-AAABridge"/>
+                        <tag id="application" value="http://batch-aaabridge02.sandbox.dev.wdc1.wildblue.net:8080/Batch-AAABridge"/>
+                        <tag id="host" value="inttcd02.sandbox.dev.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcd02"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+            <collectionInfo collectorType="mbean" assignedCollector="collector002">
+               
+            </collectionInfo>
+            <collectionInfo collectorType="mbean" assignedCollector="collector002">
+                <collectionSource versionfilter="/Batch-AdjustUsage/v1">
+                    <collectionQuery>http://batch-adjustusage01.sandbox.dev.wdc1.wildblue.net:8080/manager/jmxproxy/?qry=*:type=Performance.Counter.Server,*</collectionQuery>
+                    <tags>
+                        <tag id="instance" value="batch-adjustusage01.sandbox.dev.wdc1.wildblue.net"/>
+                        <tag id="cluster" value="batch-adjustusage"/>
+                        <tag id="service" value="http://batch-adjustusage01.sandbox.dev.wdc1.wildblue.net:8080/Batch-AdjustUsage/v1/services/AdjustUsageSubmitBatch?wsdl"/>
+                        <tag id="application" value="http://batch-adjustusage01.sandbox.dev.wdc1.wildblue.net:8080/Batch-AdjustUsage/v1"/>
+                        <tag id="host" value="inttcd01.sandbox.dev.wdc1.wildblue.net"/>
+                        <tag id="hostGroup" value="inttcd01"/>
+                        <tag id="version" value="v1"/>
+                    </tags>
+                </collectionSource>
+            </collectionInfo>
+
+        </collectionInfos>
+    </collectorConfig>
+</config>

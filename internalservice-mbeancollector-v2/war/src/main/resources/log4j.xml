@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- Setup just a console appender to log to Standard Out -->
+	<appender name="MbeanCollectorServiceConsole" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="OFF" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="=== %d{ISO8601} %-5p Thread: %-10t - %l - %m%n" />
+		</layout>
+	</appender>
+
+
+	<!-- Daily rolling file appender - Roll every day - Debug Threshold -->
+	<appender name="MbeanCollectorServiceFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Threshold" value="DEBUG" />
+		<param name="File" value="${catalina.base}/logs/mbeancollectorservice.log" />
+		<param name="DatePattern" value=".yyyy-MM-dd" />
+		<param name="maxFileSize" value="10MB" />
+		<param name="maxBackupIndex" value="10" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="=== %d{ISO8601} %-5p Thread: %-10t - %l - %m%n" />
+		</layout>
+	</appender>
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="=== %d{ISO8601} %-5p Thread: %-10t - %l - %m%n" />
+		</layout>
+	</appender>
+
+	<!-- Setup the loggers. -->
+	<logger name="com.viasat">
+		<level value="DEBUG" />
+		<appender-ref ref="MbeanCollectorServiceFile" />
+		<appender-ref ref="console" />
+	</logger>
+	<logger name="org.apache.cxf">
+		<level value="INFO" />
+		<appender-ref ref="MbeanCollectorServiceFile" />
+		<appender-ref ref="console" />
+	</logger>
+	<logger name="org.springframework">
+		<level value="INFO" />
+		<appender-ref ref="MbeanCollectorServiceFile" />
+		<appender-ref ref="console" />
+	</logger>
+	<logger name="org.apache.kafka">
+		<level value="ERROR" />
+		<appender-ref ref="MbeanCollectorServiceFile" />
+		<appender-ref ref="console" />
+	</logger>
+	<logger name="com.amazonaws">
+		<level value="WARN" />
+		<appender-ref ref="MbeanCollectorServiceFile" />
+		<appender-ref ref="console" />
+	</logger>
+	<logger name="io.viasat.databus">
+		<level value="WARN" />
+		<appender-ref ref="MbeanCollectorServiceFile" />
+		<appender-ref ref="console" />
+	</logger>
+</log4j:configuration>

@@ -1,0 +1,459 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: Select a VPC that allows instances access out to the Internet.
+  SubnetID:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Select at least two subnets in your selected VPC. The subnets select should be private to viasat.
+  AppVersion:
+    Type: String
+    Default: artifactory.viasat.com:8108/is-mbeancollector:2.1.0-007.1
+    Description: What version of the mbean-collector app do you want to deploy. It must exist in artifactory and the full path should be provided here.
+  DesiredCapacity:
+    Type: Number
+    Default: '1'
+    Description: Number of instances to launch in your ECS cluster.
+  MaxSize:
+    Type: Number
+    Default: '1'
+    Description: Maximum number of instances that can be launched in your ECS cluster.
+  ConfigDocPath:
+    Type: String
+    Default: /data/configclient-dev-devidb.xml
+  Environment:
+    Type: String
+    Default: dev
+    Description: This will be used as a tag for billing reports. Enter dev,test,prod or whatever makes sense for grouping.
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues: [t2.micro, t2.small, t2.medium, t2.large, m3.medium, m3.large,
+      m3.xlarge, m3.2xlarge, m4.large, m4.xlarge, m4.2xlarge, m4.4xlarge, m4.10xlarge,
+      c4.large, c4.xlarge, c4.2xlarge, c4.4xlarge, c4.8xlarge, c3.large, c3.xlarge,
+      c3.2xlarge, c3.4xlarge, c3.8xlarge, r3.large, r3.xlarge, r3.2xlarge, r3.4xlarge,
+      r3.8xlarge, i2.xlarge, i2.2xlarge, i2.4xlarge, i2.8xlarge]
+    ConstraintDescription: Please choose a valid instance type.
+Mappings:
+  AWSRegionToAMI:
+    us-east-1:
+      AMIID: ami-eca289fb
+    us-east-2:
+      AMIID: ami-446f3521
+    us-west-1:
+      AMIID: ami-9fadf8ff
+    us-west-2:
+      AMIID: ami-7abc111a
+    eu-west-1:
+      AMIID: ami-a1491ad2
+    eu-central-1:
+      AMIID: ami-54f5303b
+    ap-northeast-1:
+      AMIID: ami-9cd57ffd
+    ap-southeast-1:
+      AMIID: ami-a900a3ca
+    ap-southeast-2:
+      AMIID: ami-5781be34
+Resources:
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+  #
+  # This is the security group for the ECS Cluster Servers (the docker servers)
+  #
+  EcsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupDescription: ECS Security Group
+      VpcId: !Ref 'VpcId'
+  #
+  # Allow HTTP from only internal viasat
+  #
+  EcsSecurityGroupHTTPinbound1:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '80'
+      ToPort: '80'
+      CidrIp: 172.16.0.0/12
+  EcsSecurityGroupHTTPinbound2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '80'
+      ToPort: '80'
+      CidrIp: 192.168.0.0/16
+  #
+  # Allow SSH from only internal viasat
+  #
+  EcsSecurityGroupSSHinbound1:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '22'
+      ToPort: '22'
+      CidrIp: 172.16.0.0/12
+  EcsSecurityGroupSSHinbound2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '22'
+      ToPort: '22'
+      CidrIp: 192.168.0.0/16
+  #
+  # Open up the port range on the hosts that we are explicitly mapping our docker containers to
+  # In this case we will start at port 9000 through 9010 to allow for 10 containers/port mappings.
+  # This is for access into the mbean-collector's healthcheck and swagger definition through a browser.
+  #
+  # Open only to internal viasat. 
+  #
+  EcsSecurityGroupALBports1:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '9000'
+      ToPort: '9001'
+      CidrIp: 172.16.0.0/12
+  EcsSecurityGroupALBports2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '9000'
+      ToPort: '9001'
+      CidrIp: 192.168.0.0/16
+  #
+  # TODO Later
+  # Leaving this as its own entry for now because eventually we will want to open up
+  # to only the CIDR blocks of all the subnets that were selected to deploy to.
+  #
+  # We need this open otherwise the healthchecks will fail on all the target groups.
+  #
+  EcsSecurityGroupALBports2:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      GroupId: !Ref 'EcsSecurityGroup'
+      IpProtocol: tcp
+      FromPort: '9000'
+      ToPort: '9001'
+      CidrIp: 0.0.0.0/0
+  CloudwatchLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ['-', [ECSLogGroup, !Ref 'AWS::StackName']]
+      RetentionInDays: 3
+  # Task Definition 1
+  #
+  taskdefinition1:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+      - Name: metrics-ecs
+        Cpu: '10'
+        Essential: 'true'
+        Image: !Ref 'AppVersion'
+        Memory: '1536'
+        LogConfiguration:
+          LogDriver: awslogs
+          Options:
+            awslogs-group: !Ref 'CloudwatchLogsGroup'
+            awslogs-region: !Ref 'AWS::Region'
+            awslogs-stream-prefix: ecs-metrics-apps
+        PortMappings:
+        - ContainerPort: 8080
+          HostPort: 9000
+        Environment:
+        - Name: JAVA_OPTS
+          Value: "-Xmx1536m -Xms512m -Djavax.net.ssl.trustStore=/apps/jee/tomcat/jssecacerts"
+        - Name: javax.net.ssl.trustStore
+          Value: /apps/jee/tomcat/jssecacerts
+        - Name: LOAD_LOCATION
+          Value: !Ref 'ConfigDocPath'
+        - Name: COLLECTOR_ID
+          Value: collector001,collector002,collector003,collector004
+  # 
+  # Our Load Balancer for this cluster. (one LB servicing the entire cluster, different listener for each service)
+  #
+  ECSALBmetrics:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      #Name: ECSALBmetrics
+      Scheme: internal
+      LoadBalancerAttributes:
+      - Key: idle_timeout.timeout_seconds
+        Value: '30'
+      Subnets: !Ref 'SubnetID'
+      SecurityGroups: [!Ref 'EcsSecurityGroup']
+  # 
+  # Default Listener. Not sure if I can remove this or not.
+  # Doesn't hurt anything to leave it in for now.
+  #
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ECSServiceRole
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics1'
+      LoadBalancerArn: !Ref 'ECSALBmetrics'
+      Port: '80'
+      Protocol: HTTP
+
+  # 
+  # Listener for service1, port 9000
+  #
+  ALBListener1:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn: ECSServiceRole
+    Properties:
+      DefaultActions:
+      - Type: forward
+        TargetGroupArn: !Ref 'ECSTGmetrics1'
+      LoadBalancerArn: !Ref 'ECSALBmetrics'
+      Port: '9000'
+      Protocol: HTTP
+  #
+  # Target group for service1
+  #
+  ECSTGmetrics1:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn: ECSALBmetrics
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+      - Key: "env"
+        Value: !Ref 'Environment'
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /InternalService-MbeanCollector/TCS/
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      #Name: ECSTGmetrics1
+      Port: 9000
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VpcId'
+  ECSAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      Tags: 
+      - Key: "component"
+        Value: "ECSMetrics"
+        PropagateAtLaunch: "true"
+      - Key: "env"
+        Value: !Ref 'Environment'
+        PropagateAtLaunch: "true"
+      VPCZoneIdentifier: !Ref 'SubnetID'
+      LaunchConfigurationName: !Ref 'ContainerInstances'
+      MinSize: '1'
+      MaxSize: !Ref 'MaxSize'
+      DesiredCapacity: !Ref 'DesiredCapacity'
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT15M
+    UpdatePolicy:
+      AutoScalingReplacingUpdate:
+        WillReplace: 'true'
+  #
+  # Launch Configuration for our cluster/docker servers
+  # Defines things like:
+  # - where to pull docker images from
+  # - which cluster to notify when it's ready to join
+  # - The AMI image to use, etc. 
+  #
+  ContainerInstances:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !FindInMap [AWSRegionToAMI, !Ref 'AWS::Region', AMIID]
+      AssociatePublicIpAddress: true
+      SecurityGroups: [!Ref 'EcsSecurityGroup']
+      InstanceType: !Ref 'InstanceType'
+      IamInstanceProfile: !Ref 'EC2InstanceProfile'
+      KeyName: !Ref 'KeyName'
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          echo ECS_CLUSTER=${ECSCluster} >> /etc/ecs/ecs.config
+          echo ECS_ENGINE_AUTH_TYPE=dockercfg >> /etc/ecs/ecs.config
+          echo ECS_ENGINE_AUTH_DATA={"artifactory.viasat.com:8108":{"auth":"bGhlbmRlcnNvbjo5MDFXR2lic29u","email":"lisa.henderson@viasat.com"}} >> /etc/ecs/ecs.config
+          yum install -y aws-cfn-bootstrap
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource ECSAutoScalingGroup --region ${AWS::Region}
+  # 
+  # service 1
+  #
+  service1:
+    Type: AWS::ECS::Service
+    DependsOn: ALBListener
+    Properties:
+      Cluster: !Ref 'ECSCluster'
+      DesiredCount: '1'
+      LoadBalancers:
+      - ContainerName: metrics-ecs
+        ContainerPort: '8080'
+        TargetGroupArn: !Ref 'ECSTGmetrics1'
+      Role: !Ref 'ECSServiceRole'
+      TaskDefinition: !Ref 'taskdefinition1'
+  
+  ECSServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: ['elasticloadbalancing:DeregisterInstancesFromLoadBalancer', 'elasticloadbalancing:DeregisterTargets',
+              'elasticloadbalancing:Describe*', 'elasticloadbalancing:RegisterInstancesWithLoadBalancer',
+              'elasticloadbalancing:RegisterTargets', 'ec2:Describe*', 'ec2:AuthorizeSecurityGroupIngress']
+            Resource: '*'
+  ServiceScalingTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: service1
+    Properties:
+      MaxCapacity: 1
+      MinCapacity: 1
+      ResourceId: !Join ['', [service/, !Ref 'ECSCluster', /, !GetAtt [service1, Name]]]
+      RoleARN: !GetAtt [AutoscalingRole, Arn]
+      ScalableDimension: ecs:service:DesiredCount
+      ServiceNamespace: ecs
+  ServiceScalingPolicy1:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      PolicyName: AStepPolicy
+      PolicyType: StepScaling
+      ScalingTargetId: !Ref 'ServiceScalingTarget'
+      StepScalingPolicyConfiguration:
+        AdjustmentType: PercentChangeInCapacity
+        Cooldown: 60
+        MetricAggregationType: Average
+        StepAdjustments:
+        - MetricIntervalLowerBound: 0
+          ScalingAdjustment: 200
+  ALB500sAlarmScaleUp:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      EvaluationPeriods: '1'
+      Statistic: Average
+      Threshold: '10'
+      AlarmDescription: Alarm if our ALB generates too many HTTP 500s.
+      Period: '60'
+      AlarmActions: [!Ref 'ServiceScalingPolicy1']
+      Namespace: AWS/ApplicationELB
+      Dimensions:
+      - Name: ECSService
+        Value: !Ref 'service1'
+      ComparisonOperator: GreaterThanThreshold
+      MetricName: HTTPCode_ELB_5XX_Count
+  EC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ec2.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: ['ecs:CreateCluster', 'ecs:DeregisterContainerInstance', 'ecs:DiscoverPollEndpoint',
+              'ecs:Poll', 'ecs:RegisterContainerInstance', 'ecs:StartTelemetrySession',
+              'ecs:Submit*', 'logs:CreateLogStream', 'logs:PutLogEvents']
+            Resource: '*'
+  AutoscalingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [application-autoscaling.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: service-autoscaling
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: ['application-autoscaling:*', 'cloudwatch:DescribeAlarms', 'cloudwatch:PutMetricAlarm',
+              'ecs:DescribeServices', 'ecs:UpdateService']
+            Resource: '*'
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles: [!Ref 'EC2Role']
+Outputs:
+  ecsservice1:
+    Value: !Ref 'service1'
+  ecscluster:
+    Value: !Ref 'ECSCluster'
+  ECSALBmetrics:
+    Description: Your ALB DNS URL
+    Value: !Join ['', [!GetAtt [ECSALBmetrics, DNSName]]]  
+  taskdef1:
+    Value: !Ref 'taskdefinition1'
