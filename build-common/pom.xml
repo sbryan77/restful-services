@@ -37,7 +37,7 @@
 		<java.version>1.8</java.version>
 		<junit.version>4.12</junit.version>
 		<release.plugin.version>2.5.3</release.plugin.version>
-		<spring.version>4.1.5.RELEASE</spring.version>
+		<spring.version>5.2.1.RELEASE</spring.version>
 		<umlgraph.version>4.6</umlgraph.version>
 		<weblogic.version>10.3</weblogic.version>
 		<!-- these are the default separators for tomcat distribution and plugin 
